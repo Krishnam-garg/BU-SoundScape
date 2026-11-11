@@ -1,0 +1,1282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BU SoundScape</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #07060c;
+        --s1: #100d1a;
+        --s2: #1a1530;
+        --tx: #f4f1ff;
+        --mut: #9d97b8;
+        --sig: #ff2e93;
+        --calm: #2ef2ff;
+        --acc: #d2ff1a;
+        --ln: rgba(244, 241, 255, 0.14);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--tx);
+        font:
+          14.5px/1.7 "Space Mono",
+          ui-monospace,
+          monospace;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: Unbounded, sans-serif;
+        font-weight: 900;
+        line-height: 1.02;
+        margin: 0;
+        text-transform: uppercase;
+      }
+      h2 {
+        font-size: clamp(26px, 3.8vw, 48px);
+        letter-spacing: -0.03em;
+      }
+      h3 {
+        letter-spacing: -0.01em;
+      }
+      section {
+        padding: 96px 6vw;
+        max-width: 1240px;
+        margin: auto;
+      }
+      .eye {
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--acc);
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .eye:before {
+        content: "";
+        width: 34px;
+        height: 3px;
+        background: var(--acc);
+        box-shadow: 0 0 12px var(--acc);
+      }
+      .lead {
+        color: var(--mut);
+        max-width: 60ch;
+        margin: 18px 0 40px;
+        font-size: 18px;
+      }
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 6vw;
+        background: rgba(7, 6, 12, 0.7);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--ln);
+      }
+      nav b {
+        font-family: Unbounded, sans-serif;
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+      }
+      nav b i {
+        color: var(--acc);
+        font-style: normal;
+      }
+      nav div a {
+        color: var(--mut);
+        text-decoration: none;
+        font-size: 14px;
+        margin-left: 22px;
+        transition: 0.2s;
+      }
+      nav div a:hover {
+        color: var(--tx);
+      }
+      #prog {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: var(--acc);
+        box-shadow: 0 0 12px var(--acc);
+        z-index: 60;
+        width: 0;
+      }
+      #hero {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        max-width: none;
+        padding: 104px 6vw 28px; /* left/right padding lines the hero up with the nav */
+        overflow: hidden;
+      }
+      #bgv {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 70% center;
+        background: #07060c;
+      }
+      #page {
+        position: relative;
+        z-index: 1;
+        background: var(--bg);
+      }
+      .hint {
+        margin-top: 22px;
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--acc);
+        animation: nudge 1.6s ease-in-out infinite;
+      }
+      @keyframes nudge {
+        50% {
+          transform: translateX(10px);
+        }
+      }
+      #hero:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 70vw;
+        height: 100%;
+        pointer-events: none;
+        /* black fade from the left edge, plus a darker patch behind the headline */
+        background:
+          linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.78) 0%,
+            rgba(0, 0, 0, 0.5) 45%,
+            rgba(0, 0, 0, 0) 100%
+          ),
+          radial-gradient(
+            ellipse 70% 70% at 0% 0%,
+            rgba(0, 0, 0, 0.55),
+            rgba(0, 0, 0, 0) 100%
+          );
+      }
+      #hero .copy {
+        position: relative;
+        z-index: 2;
+        max-width: min(560px, 44vw);
+      }
+      #hero h1 {
+        font-size: clamp(30px, 4.6vw, 68px);
+        letter-spacing: -0.05em;
+      }
+      #hero h1 span {
+        display: block;
+        color: var(--tx);
+        margin-bottom: 4px;
+        text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
+      }
+      #hero h1 span.y {
+        color: var(--acc);
+      }
+      #hero .lead span {
+        color: var(--tx);
+        text-shadow: 0 1px 14px rgba(0, 0, 0, 0.7);
+      }
+      #hero .lead {
+        margin: 24px 0 0;
+        font-size: 13.5px;
+      }
+      .btn {
+        display: inline-block;
+        margin-top: 28px;
+        padding: 15px 28px;
+        border: 2px solid var(--bg);
+        background: var(--acc);
+        color: var(--bg);
+        text-decoration: none;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        box-shadow: 6px 6px 0 var(--sig);
+        transition: 0.2s;
+      }
+      .btn:hover {
+        transform: translate(3px, 3px);
+        box-shadow: 3px 3px 0 var(--sig);
+      }
+      .stats {
+        margin-top: 0;
+        backdrop-filter: blur(10px);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 1px;
+        background: var(--ln);
+        border: 1px solid var(--ln);
+        border-radius: 20px;
+        overflow: hidden;
+        margin-top: 56px;
+      }
+      .stat {
+        background: rgba(16, 13, 26, 0.78);
+        padding: 22px;
+      }
+      .stat big {
+        font-family: Unbounded, sans-serif;
+        font-size: 34px;
+        color: var(--acc);
+        display: block;
+        line-height: 1;
+      }
+      .stat span {
+        font-size: 13px;
+        color: var(--mut);
+      }
+      .mapf {
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid var(--ln);
+        height: min(78vh, 720px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+      }
+      .mapf iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+      .card {
+        background: var(--s1);
+        border: 1px solid var(--ln);
+        border-radius: 4px;
+        padding: 26px;
+        box-shadow: inset 0 0 0 1px rgba(46, 242, 255, 0.05);
+      }
+      .g2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        gap: 22px;
+      }
+      .cols {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+        align-items: end;
+        height: 260px;
+      }
+      .col {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        height: 100%;
+        text-align: center;
+        font-size: 12px;
+        color: var(--mut);
+      }
+      .tr {
+        position: relative;
+        flex: 1;
+        border-radius: 10px 10px 0 0;
+        background: var(--s2);
+      }
+      .fill {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 10px 10px 0 0;
+        height: 0;
+        transition: height 1.1s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .lim {
+        position: absolute;
+        left: -6px;
+        right: -6px;
+        border-top: 2px dashed var(--tx);
+        opacity: 0.8;
+      }
+      .col b {
+        color: var(--tx);
+        font-size: 15px;
+        margin-top: 6px;
+      }
+      .col em {
+        font-style: normal;
+        font-size: 11px;
+      }
+      .zr {
+        display: grid;
+        grid-template-columns: 118px 1fr 52px;
+        gap: 10px;
+        align-items: center;
+        font-size: 13px;
+        margin: 6px 0;
+        color: var(--mut);
+      }
+      .zt {
+        position: relative;
+        height: 14px;
+      }
+      .zt i {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        border-radius: 4px;
+        width: 0;
+        transition: width 1s;
+      }
+      .zt u {
+        position: absolute;
+        top: -3px;
+        bottom: -3px;
+        width: 2px;
+        background: var(--tx);
+        opacity: 0.6;
+      }
+      table.hm {
+        border-collapse: separate;
+        border-spacing: 3px;
+        width: 100%;
+        font-size: 13px;
+      }
+      .hm th {
+        font-weight: 500;
+        color: var(--mut);
+        text-align: left;
+        padding: 4px 8px;
+        font-size: 12px;
+      }
+      .hm td {
+        padding: 9px 6px;
+        text-align: center;
+        border-radius: 7px;
+        color: #07060c;
+        font-weight: 700;
+        position: relative;
+        transition: transform 0.15s;
+      }
+      .hm td:hover {
+        transform: scale(1.12);
+        z-index: 2;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      }
+      .hm td.o:after {
+        content: "";
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #07060c;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      .chip {
+        border: 1px solid var(--ln);
+        background: none;
+        color: var(--tx);
+        padding: 6px 13px;
+        border-radius: 2px;
+        cursor: pointer;
+        font: inherit;
+        font-size: 13px;
+        transition: 0.2s;
+      }
+      .chip.off {
+        opacity: 0.35;
+      }
+      .chip.on {
+        background: var(--acc);
+        color: var(--bg);
+        border-color: var(--acc);
+      }
+      .chip i {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        margin-right: 7px;
+      }
+      svg text {
+        fill: var(--mut);
+        font-size: 11px;
+      }
+      .tip {
+        position: fixed;
+        pointer-events: none;
+        background: #fff;
+        color: #111;
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        z-index: 99;
+        opacity: 0;
+        transition: opacity 0.1s;
+      }
+      .imp {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 18px;
+      }
+      .ic {
+        cursor: default;
+        transition: 0.3s;
+        overflow: hidden;
+      }
+      .ic:hover {
+        transform: translateY(-6px);
+        border-color: var(--acc);
+        box-shadow: 0 0 30px rgba(210, 255, 26, 0.18);
+      }
+      .ic h3 {
+        font-size: 19px;
+        margin: 12px 0 8px;
+      }
+      .ic p {
+        margin: 0;
+        color: var(--mut);
+        font-size: 15px;
+      }
+      .ic .more {
+        max-height: 0;
+        opacity: 0;
+        transition: 0.4s;
+        color: var(--tx);
+        font-size: 14px;
+      }
+      .ic:hover .more,
+      .ic:focus .more {
+        max-height: 140px;
+        opacity: 1;
+        margin-top: 12px;
+      }
+      .ic svg {
+        width: 46px;
+        height: 20px;
+      }
+      .ic svg path {
+        fill: none;
+        stroke: var(--acc);
+        stroke-width: 2.5;
+        stroke-linecap: round;
+      }
+      .ck {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 11px 0;
+        border-bottom: 1px solid var(--ln);
+        cursor: pointer;
+        font-size: 15px;
+      }
+      .ck input {
+        display: none;
+      }
+      .ck span.b {
+        flex: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 7px;
+        border: 2px solid var(--mut);
+        margin-top: 2px;
+        transition: 0.2s;
+        display: grid;
+        place-items: center;
+        font-size: 13px;
+      }
+      .ck input:checked + span.b {
+        background: var(--calm);
+        border-color: var(--calm);
+        color: #07060c;
+      }
+      .ck input:checked ~ span.t {
+        opacity: 0.5;
+        text-decoration: line-through;
+      }
+      .ring {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 10px;
+      }
+      .ring svg {
+        width: 74px;
+        height: 74px;
+        transform: rotate(-90deg);
+      }
+      .ring circle {
+        fill: none;
+        stroke-width: 7;
+      }
+      .ring .bg {
+        stroke: var(--s2);
+      }
+      .ring .fg {
+        stroke: var(--calm);
+        stroke-linecap: round;
+        transition: stroke-dashoffset 0.6s;
+      }
+      .pod {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+      }
+      .pc {
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.2s,
+          opacity 0.3s;
+      }
+      .pc .rk {
+        position: absolute;
+        right: 16px;
+        top: -6px;
+        font:
+          900 96px Unbounded,
+          sans-serif;
+        color: var(--s2);
+      }
+      .pc > * {
+        position: relative;
+      }
+      .pc h3 {
+        font-size: 28px;
+      }
+      .pc .v {
+        font:
+          900 34px Unbounded,
+          sans-serif;
+        margin-top: 14px;
+      }
+      .pc small {
+        color: var(--mut);
+      }
+      .mini {
+        display: flex;
+        gap: 4px;
+        height: 34px;
+        align-items: flex-end;
+        margin-top: 16px;
+      }
+      .mini i {
+        flex: 1;
+        border-radius: 3px;
+      }
+      .hear {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .hear .chip {
+        padding: 12px 20px;
+      }
+      .hear .chip.on {
+        background: var(--sig);
+        color: #fff;
+        border-color: var(--sig);
+        animation: pulse 1s infinite;
+      }
+      @keyframes pulse {
+        50% {
+          box-shadow: 0 0 0 10px rgba(255, 46, 147, 0.15);
+        }
+      }
+      .rv {
+        opacity: 0;
+        transform: translateY(26px);
+        transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .rv.in {
+        opacity: 1;
+        transform: none;
+      }
+      footer {
+        padding: 50px 6vw;
+        border-top: 1px solid var(--ln);
+        color: var(--mut);
+        font-size: 14px;
+        max-width: 1240px;
+        margin: auto;
+      }
+      @media (max-width: 900px) {
+        #hero .copy {
+          max-width: 100%;
+        }
+      }
+      @media (max-width: 700px) {
+        nav div {
+          display: flex;
+        }
+        nav div a {
+          display: none;
+        }
+        .zr {
+          grid-template-columns: 90px 1fr 46px;
+        }
+      }
+      .calm * {
+        transition: none !important;
+        animation: none !important;
+      }
+      .calm .rv {
+        opacity: 1;
+        transform: none;
+      }
+      #mo {
+        margin-left: 22px;
+        border: 1px solid var(--ln);
+        background: none;
+        color: var(--mut);
+        font: inherit;
+        font-size: 12px;
+        padding: 5px 11px;
+        cursor: pointer;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      #mo:hover {
+        color: var(--acc);
+        border-color: var(--acc);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="prog"></div>
+    <nav>
+      <b>BU<i>·</i>SoundScape</b>
+      <div>
+        <a href="#map">Map</a><a href="#who">WHO</a><a href="#data">Analytics</a
+        ><a href="#impact">Impact</a><a href="#act">Solutions</a
+        ><a href="#study">Study spots</a
+        ><button id="mo" title="Turn page animations on or off"></button>
+      </div>
+    </nav>
+    <video
+      id="bgv"
+      src="https://res.cloudinary.com/dyvlj9ews/video/upload/v1794347393/1794346867418071.mp4"
+      muted
+      playsinline
+      preload="auto"
+    ></video>
+    <header id="hero">
+      <div class="copy">
+        <div class="eye">BU SoundScape</div>
+        <h1><span>TOO LOUD</span><span class="y">TO FOCUS.</span></h1>
+        <p class="lead">
+          <span
+            >High-decibel environments are quietly wrecking student
+            productivity. BU SoundScape is an environmental spatial study
+            mapping acoustic pollution across campus zones.</span
+          >
+        </p>
+        <a class="btn" href="#map">See the noise map ↓</a>
+        <div class="hint"></div>
+      </div>
+      <div class="in"><div class="stats" id="stats"></div></div>
+    </header>
+    <div id="page">
+      <section id="map">
+        <div class="eye rv">Interactive map</div>
+        <h2 class="rv">
+          Tap anywhere on campus.<br />Analyse the NOISE levels
+        </h2>
+        <p class="lead rv">
+          Pick a time of day and see the trend of NOISE. Compare our data with
+          the WHO limit.
+        </p>
+        <div class="mapf rv">
+          <iframe
+            src="noise_map.html"
+            title="Interactive noise map"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </section>
+      <section id="who">
+        <div class="eye rv">Against the guideline</div>
+        <h2 class="rv">Where we stand<br />versus the WHO</h2>
+        <p class="lead rv">
+          The WHO’s Guidelines for Community Noise recommend staying under
+          <b>55 dB</b> outdoors in the daytime (to avoid serious annoyance) and
+          <b>45 dB</b> at night, with 50 dB marking moderate annoyance. Inside
+          classrooms WHO targets about 35 dB. The dashed line shows the limit
+          that applies to each slot.
+        </p>
+        <div class="g2">
+          <div class="card rv">
+            <h3 style="font-size: 22px; margin-bottom: 6px">
+              Campus average per time slot
+            </h3>
+            <p style="color: var(--mut); margin: 0 0 18px; font-size: 14px">
+              Average of all spots vs the limit
+            </p>
+            <div class="cols" id="slotchart"></div>
+          </div>
+          <div class="card rv">
+            <h3 style="font-size: 22px; margin-bottom: 6px">
+              Zones over (or under) the limit
+            </h3>
+            <p style="color: var(--mut); margin: 0 0 14px; font-size: 14px">
+              Average dB difference from the WHO limit across the day
+            </p>
+            <div id="zonechart"></div>
+          </div>
+        </div>
+      </section>
+      <section id="data">
+        <div class="eye rv">Analytics</div>
+        <h2 class="rv">Every zone, every slot</h2>
+        <p class="lead rv">
+          This Heat Grid compares average noise of a location at each time slot,
+          a dot in a cell means that zone is above the WHO limit for that slot.
+        </p>
+        <div class="g2">
+          <div class="card rv">
+            <h3 style="font-size: 22px; margin-bottom: 14px">
+              Zone × time heat grid
+            </h3>
+            <div style="overflow-x: auto">
+              <table class="hm" id="grid"></table>
+            </div>
+          </div>
+          <div class="card rv">
+            <h3 style="font-size: 22px; margin-bottom: 14px">
+              The rhythm of each zone type
+            </h3>
+            <div class="chips" id="catchips"></div>
+            <svg id="lines" viewBox="0 0 600 280" width="100%"></svg>
+          </div>
+        </div>
+        <div class="card rv" style="margin-top: 22px">
+          <h3 style="font-size: 22px; margin-bottom: 6px">
+            Hear the difference
+          </h3>
+          <p style="color: var(--mut); margin: 0 0 16px; font-size: 14px">
+            A rough simulation of ambient noise at each level.
+          </p>
+          <div class="hear" id="hear"></div>
+        </div>
+      </section>
+      <section id="impact">
+        <div class="eye rv">Why it matters</div>
+        <h2 class="rv">What noise does<br />to students</h2>
+        <p class="lead rv">
+          Our Campus levels rarely reach damaging-to-hearing territory, but
+          chronic noise still costs us sleep, focus and calm.
+        </p>
+        <div class="imp" id="imp"></div>
+      </section>
+      <section id="act">
+        <div class="eye rv">Solutions</div>
+        <h2 class="rv">Turn the volume down</h2>
+        <p class="lead rv">
+          Tick what you already do. Small habits add up, and some fixes need the
+          campus to act.
+        </p>
+        <div class="g2">
+          <div class="card rv">
+            <div class="ring">
+              <svg viewBox="0 0 80 80">
+                <circle class="bg" cx="40" cy="40" r="33" />
+                <circle
+                  class="fg"
+                  id="fg"
+                  cx="40"
+                  cy="40"
+                  r="33"
+                  stroke-dasharray="207"
+                  stroke-dashoffset="207"
+                />
+              </svg>
+              <div>
+                <h3 style="font-size: 24px">What students can do</h3>
+                <span
+                  id="pct"
+                  style="color: var(--mut); font-size: 14px"
+                ></span>
+              </div>
+            </div>
+            <div id="l1"></div>
+          </div>
+          <div class="card rv">
+            <h3 style="font-size: 24px; margin-bottom: 10px">
+              What the campus can do
+            </h3>
+            <div id="l2"></div>
+          </div>
+        </div>
+      </section>
+      <section id="study">
+        <div class="eye rv">Find your quiet</div>
+        <h2 class="rv">Top 3 places to Focus</h2>
+        <p class="lead rv">
+          Ranked by the lowest average noise among academic, silence and
+          administrative zones. Choose when you plan to study.
+        </p>
+        <div class="chips" id="pills"></div>
+        <div class="pod" id="pod"></div>
+      </section>
+      <footer>
+        <b style="color: var(--tx)">BU SoundScape</b> · Environmental Studies
+        project, Bennett University. Noise was recorded with CSIR-NEERI Noise
+        Measurement Application in five daily time slots and Across 2 weeks.
+        Guideline values: WHO Guidelines for Community Noise.<br />Team:
+        <i>Krishnam Garg, Sarang Kumar, Mohit Goyal & Madhav Khurana</i>
+      </footer>
+    </div>
+    <div class="tip" id="tip"></div>
+    <script>
+      const D = {"rows": [["A Block", "Afternoon", 45.3, "ABlock-1"], ["A Block", "Evening", 47.4, "ABlock-1"], ["A Block", "Midnight", 46.1, "ABlock-1"], ["A Block", "Morning", 46.5, "ABlock-1"], ["A Block", "Night", 46.8, "ABlock-1"], ["A Block", "Afternoon", 46.8, "ABlock-2"], ["A Block", "Evening", 46.2, "ABlock-2"], ["A Block", "Midnight", 46.1, "ABlock-2"], ["A Block", "Morning", 45.1, "ABlock-2"], ["A Block", "Night", 46.1, "ABlock-2"], ["A Block", "Afternoon", 44.0, "ABlock-3"], ["A Block", "Evening", 42.8, "ABlock-3"], ["A Block", "Midnight", 44.6, "ABlock-3"], ["A Block", "Morning", 44.8, "ABlock-3"], ["A Block", "Night", 46.0, "ABlock-3"], ["A Block", "Afternoon", 44.4, "ABlock-4"], ["A Block", "Evening", 46.6, "ABlock-4"], ["A Block", "Midnight", 45.2, "ABlock-4"], ["A Block", "Morning", 44.1, "ABlock-4"], ["A Block", "Night", 44.1, "ABlock-4"], ["B Block", "Afternoon", 47.8, "BBlock-1"], ["B Block", "Evening", 47.8, "BBlock-1"], ["B Block", "Midnight", 49.6, "BBlock-1"], ["B Block", "Morning", 44.6, "BBlock-1"], ["B Block", "Night", 47.8, "BBlock-1"], ["B Block", "Afternoon", 47.6, "BBlock-2"], ["B Block", "Evening", 46.0, "BBlock-2"], ["B Block", "Midnight", 38.1, "BBlock-2"], ["B Block", "Morning", 43.0, "BBlock-2"], ["B Block", "Night", 47.6, "BBlock-2"], ["B Block", "Afternoon", 49.4, "BBlock-3"], ["B Block", "Evening", 48.9, "BBlock-3"], ["B Block", "Midnight", 45.4, "BBlock-3"], ["B Block", "Morning", 46.6, "BBlock-3"], ["B Block", "Night", 49.5, "BBlock-3"], ["B Block", "Afternoon", 47.9, "BBlock-4"], ["B Block", "Evening", 49.2, "BBlock-4"], ["B Block", "Midnight", 46.1, "BBlock-4"], ["B Block", "Morning", 49.0, "BBlock-4"], ["B Block", "Night", 50.0, "BBlock-4"], ["Walkway", "Afternoon", 53.5, "Ww-1"], ["Walkway", "Evening", 69.2, "Ww-1"], ["Walkway", "Midnight", 69.9, "Ww-1"], ["Walkway", "Morning", 43.5, "Ww-1"], ["Walkway", "Night", 61.5, "Ww-1"], ["Boy's Hostel", "Afternoon", 57.0, "BoyHost-2"], ["Boy's Hostel", "Evening", 73.2, "BoyHost-2"], ["Boy's Hostel", "Midnight", 68.6, "BoyHost-2"], ["Boy's Hostel", "Morning", 46.3, "BoyHost-2"], ["Boy's Hostel", "Night", 65.0, "BoyHost-2"], ["Girl's Hostel", "Afternoon", 56.2, "GirlHost-3"], ["Girl's Hostel", "Evening", 56.2, "GirlHost-3"], ["Girl's Hostel", "Midnight", 56.2, "GirlHost-3"], ["Girl's Hostel", "Morning", 56.2, "GirlHost-3"], ["Girl's Hostel", "Night", 56.2, "GirlHost-3"], ["Boy's Hostel", "Afternoon", 53.5, "BoysHost-1"], ["Boy's Hostel", "Evening", 69.2, "BoysHost-1"], ["Boy's Hostel", "Midnight", 69.9, "BoysHost-1"], ["Boy's Hostel", "Morning", 43.5, "BoysHost-1"], ["Boy's Hostel", "Night", 61.5, "BoysHost-1"], ["Boy's Hostel", "Afternoon", 57.0, "BoysHost-2"], ["Boy's Hostel", "Evening", 73.2, "BoysHost-2"], ["Boy's Hostel", "Midnight", 68.6, "BoysHost-2"], ["Boy's Hostel", "Morning", 46.3, "BoysHost-2"], ["Boy's Hostel", "Night", 65.0, "BoysHost-2"], ["Boy's Hostel", "Afternoon", 55.1, "BoysHost-3"], ["Boy's Hostel", "Evening", 69.5, "BoysHost-3"], ["Boy's Hostel", "Midnight", 72.6, "BoysHost-3"], ["Boy's Hostel", "Morning", 45.7, "BoysHost-3"], ["Boy's Hostel", "Night", 63.3, "BoysHost-3"], ["E Block", "Afternoon", 51.6, "EBlock-1"], ["E Block", "Evening", 41.8, "EBlock-1"], ["E Block", "Midnight", 42.0, "EBlock-1"], ["E Block", "Morning", 51.7, "EBlock-1"], ["E Block", "Night", 41.5, "EBlock-1"], ["E Block", "Afternoon", 57.7, "EBlock-2"], ["E Block", "Evening", 51.2, "EBlock-2"], ["E Block", "Midnight", 49.3, "EBlock-2"], ["E Block", "Morning", 56.5, "EBlock-2"], ["E Block", "Night", 47.3, "EBlock-2"], ["E Block", "Afternoon", 56.1, "EBlock-3"], ["E Block", "Evening", 49.7, "EBlock-3"], ["E Block", "Midnight", 46.4, "EBlock-3"], ["E Block", "Morning", 55.8, "EBlock-3"], ["E Block", "Night", 47.4, "EBlock-3"], ["German Hanger", "Afternoon", 44.8, "GermanHa-1"], ["German Hanger", "Evening", 48.0, "GermanHa-1"], ["German Hanger", "Midnight", 45.3, "GermanHa-1"], ["German Hanger", "Morning", 44.8, "GermanHa-1"], ["German Hanger", "Night", 45.8, "GermanHa-1"], ["German Hanger", "Afternoon", 46.8, "GermanHa-2"], ["German Hanger", "Evening", 46.1, "GermanHa-2"], ["German Hanger", "Midnight", 44.3, "GermanHa-2"], ["German Hanger", "Morning", 48.6, "GermanHa-2"], ["German Hanger", "Night", 45.9, "GermanHa-2"], ["German Hanger", "Afternoon", 47.5, "GermanHa-3"], ["German Hanger", "Evening", 47.8, "GermanHa-3"], ["German Hanger", "Midnight", 43.8, "GermanHa-3"], ["German Hanger", "Morning", 45.7, "GermanHa-3"], ["German Hanger", "Night", 47.1, "GermanHa-3"], ["Girl's Hostel", "Afternoon", 56.2, "GirlsHos-1"], ["Girl's Hostel", "Evening", 56.2, "GirlsHos-1"], ["Girl's Hostel", "Midnight", 56.2, "GirlsHos-1"], ["Girl's Hostel", "Morning", 56.2, "GirlsHos-1"], ["Girl's Hostel", "Night", 56.2, "GirlsHos-1"], ["Girl's Hostel", "Afternoon", 55.8, "GirlsHos-2"], ["Girl's Hostel", "Evening", 56.6, "GirlsHos-2"], ["Girl's Hostel", "Midnight", 43.5, "GirlsHos-2"], ["Girl's Hostel", "Morning", 43.9, "GirlsHos-2"], ["Girl's Hostel", "Night", 54.9, "GirlsHos-2"], ["Girl's Hostel", "Afternoon", 56.0, "GirlsHos-3"], ["Girl's Hostel", "Evening", 54.2, "GirlsHos-3"], ["Girl's Hostel", "Midnight", 46.1, "GirlsHos-3"], ["Girl's Hostel", "Morning", 47.0, "GirlsHos-3"], ["Girl's Hostel", "Night", 54.4, "GirlsHos-3"], ["Gobble Mess", "Afternoon", 73.5, "GobbleMe-1"], ["Gobble Mess", "Evening", 72.5, "GobbleMe-1"], ["Gobble Mess", "Midnight", 44.7, "GobbleMe-1"], ["Gobble Mess", "Morning", 60.7, "GobbleMe-1"], ["Gobble Mess", "Night", 48.6, "GobbleMe-1"], ["Gobble Mess", "Afternoon", 70.7, "GobbleMe-2"], ["Gobble Mess", "Evening", 73.6, "GobbleMe-2"], ["Gobble Mess", "Midnight", 44.6, "GobbleMe-2"], ["Gobble Mess", "Morning", 64.7, "GobbleMe-2"], ["Gobble Mess", "Night", 45.7, "GobbleMe-2"], ["Gobble Mess", "Afternoon", 73.6, "GobbleMe-3"], ["Gobble Mess", "Evening", 73.5, "GobbleMe-3"], ["Gobble Mess", "Midnight", 45.1, "GobbleMe-3"], ["Gobble Mess", "Morning", 66.7, "GobbleMe-3"], ["Gobble Mess", "Night", 46.6, "GobbleMe-3"], ["Gobble Mess", "Afternoon", 72.6, "GobbleMe-4"], ["Gobble Mess", "Evening", 71.4, "GobbleMe-4"], ["Gobble Mess", "Midnight", 48.0, "GobbleMe-4"], ["Gobble Mess", "Morning", 63.4, "GobbleMe-4"], ["Gobble Mess", "Night", 47.1, "GobbleMe-4"], ["LRC", "Afternoon", 47.5, "LRC-1"], ["LRC", "Evening", 59.0, "LRC-1"], ["LRC", "Midnight", 45.3, "LRC-1"], ["LRC", "Morning", 47.7, "LRC-1"], ["LRC", "Night", 48.4, "LRC-1"], ["LRC", "Afternoon", 42.9, "LRC-2"], ["LRC", "Evening", 50.1, "LRC-2"], ["LRC", "Midnight", 39.7, "LRC-2"], ["LRC", "Morning", 41.2, "LRC-2"], ["LRC", "Night", 42.0, "LRC-2"], ["LRC", "Afternoon", 45.9, "LRC-3"], ["LRC", "Evening", 57.1, "LRC-3"], ["LRC", "Midnight", 47.0, "LRC-3"], ["LRC", "Morning", 47.5, "LRC-3"], ["LRC", "Night", 47.3, "LRC-3"], ["LRC", "Afternoon", 47.2, "LRC-4"], ["LRC", "Evening", 56.8, "LRC-4"], ["LRC", "Midnight", 43.0, "LRC-4"], ["LRC", "Morning", 41.2, "LRC-4"], ["LRC", "Night", 45.9, "LRC-4"], ["M Block", "Afternoon", 56.9, "MBlock-1"], ["M Block", "Evening", 50.3, "MBlock-1"], ["M Block", "Midnight", 44.3, "MBlock-1"], ["M Block", "Morning", 51.1, "MBlock-1"], ["M Block", "Night", 48.7, "MBlock-1"], ["M Block", "Afternoon", 49.6, "MBlock-2"], ["M Block", "Evening", 44.3, "MBlock-2"], ["M Block", "Midnight", 40.5, "MBlock-2"], ["M Block", "Morning", 45.5, "MBlock-2"], ["M Block", "Night", 38.7, "MBlock-2"], ["M Block", "Afternoon", 56.4, "MBlock-3"], ["M Block", "Evening", 49.2, "MBlock-3"], ["M Block", "Midnight", 45.9, "MBlock-3"], ["M Block", "Morning", 49.5, "MBlock-3"], ["M Block", "Night", 50.2, "MBlock-3"], ["N Block", "Afternoon", 65.5, "NBlock-1"], ["N Block", "Evening", 65.4, "NBlock-1"], ["N Block", "Midnight", 48.4, "NBlock-1"], ["N Block", "Morning", 58.3, "NBlock-1"], ["N Block", "Night", 50.9, "NBlock-1"], ["N Block", "Afternoon", 63.9, "NBlock-2"], ["N Block", "Evening", 62.3, "NBlock-2"], ["N Block", "Midnight", 43.8, "NBlock-2"], ["N Block", "Morning", 57.1, "NBlock-2"], ["N Block", "Night", 44.4, "NBlock-2"], ["N Block", "Afternoon", 64.1, "NBlock-3"], ["N Block", "Evening", 61.4, "NBlock-3"], ["N Block", "Midnight", 42.3, "NBlock-3"], ["N Block", "Morning", 53.8, "NBlock-3"], ["N Block", "Night", 48.1, "NBlock-3"], ["Paid Mess", "Afternoon", 64.4, "PaidMess-1"], ["Paid Mess", "Evening", 63.6, "PaidMess-1"], ["Paid Mess", "Midnight", 53.5, "PaidMess-1"], ["Paid Mess", "Morning", 61.4, "PaidMess-1"], ["Paid Mess", "Night", 55.2, "PaidMess-1"], ["Paid Mess", "Afternoon", 66.1, "PaidMess-2"], ["Paid Mess", "Evening", 64.6, "PaidMess-2"], ["Paid Mess", "Midnight", 50.3, "PaidMess-2"], ["Paid Mess", "Morning", 63.4, "PaidMess-2"], ["Paid Mess", "Night", 52.1, "PaidMess-2"], ["Paid Mess", "Afternoon", 66.5, "PaidMess-3"], ["Paid Mess", "Evening", 66.2, "PaidMess-3"], ["Paid Mess", "Midnight", 54.4, "PaidMess-3"], ["Paid Mess", "Morning", 63.4, "PaidMess-3"], ["Paid Mess", "Night", 58.6, "PaidMess-3"], ["P Block", "Afternoon", 59.7, "PBlock-1"], ["P Block", "Evening", 63.4, "PBlock-1"], ["P Block", "Midnight", 42.9, "PBlock-1"], ["P Block", "Morning", 54.2, "PBlock-1"], ["P Block", "Night", 42.8, "PBlock-1"], ["P Block", "Afternoon", 64.3, "PBlock-2"], ["P Block", "Evening", 61.5, "PBlock-2"], ["P Block", "Midnight", 45.4, "PBlock-2"], ["P Block", "Morning", 54.5, "PBlock-2"], ["P Block", "Night", 46.4, "PBlock-2"], ["P Block", "Afternoon", 64.6, "PBlock-3"], ["P Block", "Evening", 68.3, "PBlock-3"], ["P Block", "Midnight", 41.7, "PBlock-3"], ["P Block", "Morning", 53.9, "PBlock-3"], ["P Block", "Night", 48.5, "PBlock-3"], ["Walkway A&B", "Afternoon", 68.6, "roadbwAa-1"], ["Walkway A&B", "Evening", 72.9, "roadbwAa-1"], ["Walkway A&B", "Midnight", 62.0, "roadbwAa-1"], ["Walkway A&B", "Morning", 54.7, "roadbwAa-1"], ["Walkway A&B", "Night", 61.5, "roadbwAa-1"], ["Walkway A&B", "Afternoon", 72.5, "roadbwAa-2"], ["Walkway A&B", "Evening", 72.4, "roadbwAa-2"], ["Walkway A&B", "Midnight", 64.2, "roadbwAa-2"], ["Walkway A&B", "Morning", 56.3, "roadbwAa-2"], ["Walkway A&B", "Night", 64.6, "roadbwAa-2"], ["Walkway A&B", "Afternoon", 70.4, "roadbwAa-3"], ["Walkway A&B", "Evening", 68.4, "roadbwAa-3"], ["Walkway A&B", "Midnight", 59.0, "roadbwAa-3"], ["Walkway A&B", "Morning", 53.7, "roadbwAa-3"], ["Walkway A&B", "Night", 66.4, "roadbwAa-3"], ["Walkway A&B", "Afternoon", 71.2, "roadbwAa-4"], ["Walkway A&B", "Evening", 72.1, "roadbwAa-4"], ["Walkway A&B", "Midnight", 60.8, "roadbwAa-4"], ["Walkway A&B", "Morning", 49.8, "roadbwAa-4"], ["Walkway A&B", "Night", 60.3, "roadbwAa-4"], ["Sports Area", "Afternoon", 46.2, "SportsAr-1"], ["Sports Area", "Evening", 55.6, "SportsAr-1"], ["Sports Area", "Midnight", 43.4, "SportsAr-1"], ["Sports Area", "Morning", 47.9, "SportsAr-1"], ["Sports Area", "Night", 45.3, "SportsAr-1"], ["Sports Area", "Afternoon", 46.2, "SportsAr-2"], ["Sports Area", "Evening", 50.8, "SportsAr-2"], ["Sports Area", "Midnight", 40.4, "SportsAr-2"], ["Sports Area", "Morning", 50.2, "SportsAr-2"], ["Sports Area", "Night", 46.3, "SportsAr-2"], ["Sports Area", "Afternoon", 43.1, "SportsAr-3"], ["Sports Area", "Evening", 52.5, "SportsAr-3"], ["Sports Area", "Midnight", 38.7, "SportsAr-3"], ["Sports Area", "Morning", 42.6, "SportsAr-3"], ["Sports Area", "Night", 43.2, "SportsAr-3"], ["Sports Area", "Afternoon", 48.6, "SportsAr-4"], ["Sports Area", "Evening", 56.0, "SportsAr-4"], ["Sports Area", "Midnight", 44.7, "SportsAr-4"], ["Sports Area", "Morning", 46.7, "SportsAr-4"], ["Sports Area", "Night", 45.3, "SportsAr-4"], ["Sports Complex", "Afternoon", 59.1, "SportsCo-1"], ["Sports Complex", "Evening", 71.7, "SportsCo-1"], ["Sports Complex", "Midnight", 49.0, "SportsCo-1"], ["Sports Complex", "Morning", 73.0, "SportsCo-1"], ["Sports Complex", "Night", 52.5, "SportsCo-1"], ["Sports Complex", "Afternoon", 61.2, "SportsCo-2"], ["Sports Complex", "Evening", 68.4, "SportsCo-2"], ["Sports Complex", "Midnight", 48.0, "SportsCo-2"], ["Sports Complex", "Morning", 68.0, "SportsCo-2"], ["Sports Complex", "Night", 49.2, "SportsCo-2"], ["Sports Complex", "Afternoon", 54.6, "SportsCo-3"], ["Sports Complex", "Evening", 67.2, "SportsCo-3"], ["Sports Complex", "Midnight", 47.0, "SportsCo-3"], ["Sports Complex", "Morning", 64.5, "SportsCo-3"], ["Sports Complex", "Night", 48.5, "SportsCo-3"], ["Sports Complex", "Afternoon", 53.3, "SportsCo-4"], ["Sports Complex", "Evening", 63.3, "SportsCo-4"], ["Sports Complex", "Midnight", 40.3, "SportsCo-4"], ["Sports Complex", "Morning", 63.1, "SportsCo-4"], ["Sports Complex", "Night", 45.0, "SportsCo-4"], ["Sports Field", "Afternoon", 40.9, "SportsFi-1"], ["Sports Field", "Evening", 51.7, "SportsFi-1"], ["Sports Field", "Midnight", 39.2, "SportsFi-1"], ["Sports Field", "Morning", 38.2, "SportsFi-1"], ["Sports Field", "Night", 41.4, "SportsFi-1"], ["Sports Field", "Afternoon", 46.9, "SportsFi-2"], ["Sports Field", "Evening", 56.7, "SportsFi-2"], ["Sports Field", "Midnight", 41.4, "SportsFi-2"], ["Sports Field", "Morning", 43.0, "SportsFi-2"], ["Sports Field", "Night", 44.0, "SportsFi-2"], ["Sports Field", "Afternoon", 48.4, "SportsFi-3"], ["Sports Field", "Evening", 62.7, "SportsFi-3"], ["Sports Field", "Midnight", 46.9, "SportsFi-3"], ["Sports Field", "Morning", 46.7, "SportsFi-3"], ["Sports Field", "Night", 46.5, "SportsFi-3"]], "cat": {"N Block": "Academic", "A Block": "Academic", "Boy's Hostel": "Residential", "B Block": "Academic", "Girl's Hostel": "Residential", "Gobble Mess": "Commercial", "Sports Complex": "Recreational", "LRC": "Silence Zone", "Paid Mess": "Commercial", "German Hanger": "Recreational", "P Block": "Academic", "Sports Field": "Recreational", "Sports Area": "Recreational", "M Block": "Administrative"}, "study": ["Academic", "Silence Zone", "Administrative"]},
+        S = ["Morning", "Afternoon", "Evening", "Night", "Midnight"],
+        LIM = {
+          Morning: 55,
+          Afternoon: 55,
+          Evening: 55,
+          Night: 45,
+          Midnight: 45,
+        };
+      const mean = (a) => a.reduce((x, y) => x + y, 0) / a.length,
+        $ = (id) => document.getElementById(id),
+        f1 = (x) => (Math.round(x * 10) / 10).toFixed(1);
+      const A = [
+          [38, "#2b83ba"],
+          [46, "#66bd63"],
+          [54, "#e5e84f"],
+          [62, "#fdae61"],
+          [70, "#e0301e"],
+          [78, "#7f0000"],
+        ],
+        hx = (c) => [1, 3, 5].map((i) => parseInt(c.substr(i, 2), 16));
+      function col(v) {
+        v = Math.max(38, Math.min(78, v));
+        for (let i = 0; i < A.length - 1; i++) {
+          const a = A[i],
+            b = A[i + 1];
+          if (v <= b[0]) {
+            const t = (v - a[0]) / (b[0] - a[0]),
+              x = hx(a[1]),
+              y = hx(b[1]);
+            return `rgb(${x.map((p, k) => Math.round(p + (y[k] - p) * t))})`;
+          }
+        }
+      }
+      const Z = {};
+      D.rows.forEach(([z, s, db]) => {
+        (Z[z] = Z[z] || {})[s] = Z[z][s] || [];
+        Z[z][s].push(db);
+      });
+      const ZM = {};
+      Object.keys(Z).forEach((z) => {
+        ZM[z] = {};
+        S.forEach((s) => (ZM[z][s] = mean(Z[z][s])));
+      });
+      const zones = Object.keys(ZM);
+      const zAll = (z) => mean(S.map((s) => ZM[z][s])),
+        slotMean = (s) =>
+          mean(D.rows.filter((r) => r[1] == s).map((r) => r[2]));
+      // stats
+      const over =
+        D.rows.filter((r) => r[2] > LIM[r[1]]).length / D.rows.length;
+      let cells = [];
+      zones.forEach((z) => S.forEach((s) => cells.push([z, s, ZM[z][s]])));
+      const hi = cells.reduce((a, b) => (b[2] > a[2] ? b : a)),
+        lo = cells.reduce((a, b) => (b[2] < a[2] ? b : a));
+      $("stats").innerHTML = [
+        [mean(D.rows.map((r) => r[2])), "dB", "campus-wide average"],
+        [Math.round(over * 100), "%", "of readings above the WHO limit"],
+        [hi[2], "dB", "loudest: " + hi[0] + ", " + hi[1].toLowerCase()],
+        [lo[2], "dB", "quietest: " + lo[0] + ", " + lo[1].toLowerCase()],
+      ]
+        .map(
+          (s) =>
+            `<div class="stat"><big><span data-n="${s[0]}">0</span><small style="font-size:18px"> ${s[1]}</small></big><span>${s[2]}</span></div>`,
+        )
+        .join("");
+      // WHO slot chart
+      $("slotchart").innerHTML = S.map((s) => {
+        const m = slotMean(s),
+          p = (v) => ((v - 30) / 50) * 100,
+          dd = m - LIM[s];
+        return `<div class="col"><div class="tr"><div class="fill" data-h="${p(m)}" style="background:${col(m)}"></div><div class="lim" style="bottom:${p(LIM[s])}%"></div></div><b>${f1(m)}</b><em>${dd > 0 ? "+" + f1(dd) + " over" : f1(-dd) + " under"}</em>${s}</div>`;
+      }).join("");
+      // zone excess
+      const ex = zones
+          .map((z) => [z, mean(S.map((s) => ZM[z][s] - LIM[s]))])
+          .sort((a, b) => b[1] - a[1]),
+        mn = Math.min(-2, ...ex.map((e) => e[1])),
+        mx = Math.max(2, ...ex.map((e) => e[1])),
+        x0 = (-mn / (mx - mn)) * 100;
+      $("zonechart").innerHTML = ex
+        .map(([z, v]) => {
+          const x = ((v - mn) / (mx - mn)) * 100,
+            l = Math.min(x, x0),
+            w = Math.abs(x - x0);
+          return `<div class="zr"><span>${z}</span><div class="zt"><i data-l="${l}" data-w="${w}" style="left:${l}%;background:${v > 0 ? "var(--sig)" : "var(--calm)"}"></i><u style="left:${x0}%"></u></div><b style="color:var(--tx)">${v > 0 ? "+" : ""}${f1(v)}</b></div>`;
+        })
+        .join("");
+      // heat grid
+      const order = zones.slice().sort((a, b) => zAll(b) - zAll(a));
+      $("grid").innerHTML =
+        "<tr><th></th>" +
+        S.map((s) => `<th>${s}</th>`).join("") +
+        "</tr>" +
+        order
+          .map(
+            (z) =>
+              `<tr><th>${z}</th>` +
+              S.map((s) => {
+                const v = ZM[z][s];
+                return `<td class="${v > LIM[s] ? "o" : ""}" style="background:${col(v)}" data-t="${z} · ${s}: ${f1(v)} dB (WHO limit ${LIM[s]})">${Math.round(v)}</td>`;
+              }).join("") +
+              "</tr>",
+          )
+          .join("");
+      // category lines
+      const cats = [...new Set(zones.map((z) => D.cat[z] || "Other"))],
+        cc = [
+          "#ff2e93",
+          "#2ef2ff",
+          "#f2c14e",
+          "#8aa4ff",
+          "#d98cf0",
+          "#b5e48c",
+          "#aaa",
+        ],
+        off = {};
+      const X = (i) => 60 + i * 115,
+        Y = (v) => 240 - ((v - 38) / (78 - 38)) * 215;
+      function lines() {
+        let h = "";
+        [40, 50, 60, 70].forEach(
+          (v) =>
+            (h += `<line x1="50" x2="590" y1="${Y(v)}" y2="${Y(v)}" stroke="rgba(255,255,255,.07)"/><text x="12" y="${Y(v) + 4}">${v}</text>`),
+        );
+        S.forEach(
+          (s, i) =>
+            (h += `<text x="${X(i)}" y="268" text-anchor="middle">${s}</text>`),
+        );
+        h += `<path d="M${X(0)},${Y(55)}H${X(2)}M${X(3)},${Y(45)}H${X(4)}" stroke="#efe9df" stroke-dasharray="4 4" fill="none" opacity=".6"/><text x="${X(2) + 6}" y="${Y(55) - 6}">WHO 55</text><text x="${X(4) - 34}" y="${Y(45) + 14}">WHO 45</text>`;
+        cats.forEach((c, k) => {
+          if (off[c]) return;
+          const zs = zones.filter((z) => (D.cat[z] || "Other") == c),
+            v = S.map((s) => mean(zs.map((z) => ZM[z][s])));
+          h +=
+            `<path d="M${v.map((y, i) => X(i) + "," + Y(y)).join("L")}" fill="none" stroke="${cc[k]}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>` +
+            v
+              .map(
+                (y, i) =>
+                  `<circle cx="${X(i)}" cy="${Y(y)}" r="5" fill="${cc[k]}" data-t="${c} · ${S[i]}: ${f1(y)} dB"/>`,
+              )
+              .join("");
+        });
+        $("lines").innerHTML = h;
+      }
+      $("catchips").innerHTML = cats
+        .map(
+          (c, k) =>
+            `<button class="chip on" data-c="${c}"><i style="background:${cc[k]}"></i>${c}</button>`,
+        )
+        .join("");
+      $("catchips").onclick = (e) => {
+        const b = e.target.closest(".chip");
+        if (!b) return;
+        off[b.dataset.c] = !off[b.dataset.c];
+        b.classList.toggle("off", off[b.dataset.c]);
+        lines();
+      };
+      lines();
+      // tooltip
+      const tip = $("tip");
+      document.addEventListener("mousemove", (e) => {
+        const t = e.target.dataset && e.target.dataset.t;
+        tip.style.opacity = t ? 1 : 0;
+        if (t) {
+          tip.textContent = t;
+          tip.style.left = e.clientX + 14 + "px";
+          tip.style.top = e.clientY + 14 + "px";
+        }
+      });
+      // hear
+      let ac, src;
+      const lv = [
+        ["Quiet library", 45],
+        ["Busy corridor", 62],
+        ["Mess at peak", 72],
+      ];
+      $("hear").innerHTML = lv
+        .map(
+          (l) =>
+            `<button class="chip" data-d="${l[1]}">▶ ${l[0]} · ${l[1]} dB</button>`,
+        )
+        .join("");
+      $("hear").onclick = (e) => {
+        const b = e.target.closest(".chip");
+        if (!b) return;
+        const was = b.classList.contains("on");
+        document.querySelectorAll("#hear .chip").forEach((x) => {
+          x.classList.remove("on");
+        });
+        if (src) {
+          src.stop();
+          src = null;
+        }
+        if (was) return;
+        ac = ac || new AudioContext();
+        const n = ac.sampleRate * 2,
+          buf = ac.createBuffer(1, n, ac.sampleRate),
+          d = buf.getChannelData(0);
+        let l = 0;
+        for (let i = 0; i < n; i++) {
+          l = (l + 0.02 * (Math.random() * 2 - 1)) / 1.02;
+          d[i] = l * 3.5;
+        }
+        src = ac.createBufferSource();
+        src.buffer = buf;
+        src.loop = true;
+        const g = ac.createGain();
+        g.gain.value = Math.pow(10, (+b.dataset.d - 82) / 20) * 0.6;
+        src.connect(g).connect(ac.destination);
+        src.start();
+        b.classList.add("on");
+      };
+      // impact
+      const wv =
+        '<svg viewBox="0 0 46 20"><path d="M2 10h6l4-8 6 16 6-12 4 4h16"/></svg>';
+      const IM = [
+        [
+          "Sleep",
+          "Night noise fragments sleep, especially in hostels.",
+          "The WHO links night-time outdoor noise above about 40 dB with disturbed sleep. Poor sleep then hits memory and mood the next day.",
+        ],
+        [
+          "Focus & learning",
+          "Noise competes with your working memory.",
+          "Intermittent sound (voices, music, footsteps) is the most disruptive for reading and problem-solving. Classrooms should stay near 35 dB.",
+        ],
+        [
+          "Stress & mood",
+          "Constant noise keeps the body on alert.",
+          "Unwanted sound raises stress responses and irritability, and makes small conflicts in shared spaces more likely.",
+        ],
+        [
+          "Academic results",
+          "Quiet study time is not equal across campus.",
+          "If the only quiet slots are early or late, students lose their best study hours. Mapping noise shows where that gap is.",
+        ],
+        [
+          "Hearing",
+          "Mostly safe here, but worth knowing.",
+          "Long exposure around 85 dB or more risks hearing loss. Campus averages sit below that, but headphones at high volume can exceed it.",
+        ],
+        [
+          "Community",
+          "Noise fuels friction between neighbours.",
+          "Late-night noise in residential areas is a common source of disputes. Shared quiet hours are fairer than complaints.",
+        ],
+      ];
+      $("imp").innerHTML = IM.map(
+        (i) =>
+          `<div class="card ic rv" tabindex="0">${wv}<h3>${i[0]}</h3><p>${i[1]}</p><div class="more">${i[2]}</div></div>`,
+      ).join("");
+      // solutions
+      const L1 = [
+          "Use the LRC or other quiet zones at peak noise hours",
+          "Plan hard study blocks for the quietest slots shown in the map",
+          "Keep headphone volume at 60% or below",
+          "Agree on quiet hours with hostel neighbours",
+          "Use earplugs or noise-cancelling headphones when you need to focus",
+          "Report persistent noise to the hostel warden or student council",
+        ],
+        L2 = [
+          "Enforce and sign-post quiet hours near hostels at night",
+          "Shift loud sports and events away from study times",
+          "Add sound-absorbing trees, shrubs or panels beside busy paths",
+          "Stagger mess timings and manage queues",
+          "Keep monitoring with this map every semester",
+          "Set up a quiet study room in a low-noise block",
+        ],
+        st = JSON.parse(localStorage.getItem("ss") || "{}");
+      const mk = (L, p) =>
+        L.map(
+          (t, i) =>
+            `<label class="ck"><input type="checkbox" data-k="${p + i}" ${st[p + i] ? "checked" : ""}><span class="b">✓</span><span class="t">${t}</span></label>`,
+        ).join("");
+      $("l1").innerHTML = mk(L1, "a");
+      $("l2").innerHTML = mk(L2, "b");
+      function prog() {
+        const c = document.querySelectorAll("#l1 input:checked").length;
+        $("fg").style.strokeDashoffset = 207 * (1 - c / L1.length);
+        $("pct").textContent = c + " of " + L1.length + " habits ticked";
+      }
+      document.addEventListener("change", (e) => {
+        if (e.target.dataset.k) {
+          st[e.target.dataset.k] = e.target.checked;
+          localStorage.setItem("ss", JSON.stringify(st));
+          prog();
+        }
+      });
+      prog();
+      // study picks
+      const study = zones.filter((z) => D.study.includes(D.cat[z])),
+        PL = ["Daytime", ...S];
+      let pick = "Daytime";
+      function pod() {
+        const sl =
+            pick == "Daytime" ? ["Morning", "Afternoon", "Evening"] : [pick],
+          v = (z) => mean(sl.map((s) => ZM[z][s])),
+          top = study
+            .slice()
+            .sort((a, b) => v(a) - v(b))
+            .slice(0, 3);
+        $("pod").innerHTML = top
+          .map((z, i) => {
+            const best = S.reduce((a, b) => (ZM[z][b] < ZM[z][a] ? b : a)),
+              lim = pick.match(/Night|Midnight/) ? 45 : 55;
+            return `<div class="card pc"><div class="rk">${i + 1}</div><small>${D.cat[z]}</small><h3>${z}</h3><div class="v" style="color:${col(v(z))}">${f1(v(z))} <small>dB</small></div><small>${v(z) <= lim ? "Within" : "Above"} the WHO ${lim} dB limit · quietest at ${best.toLowerCase()}</small><div class="mini">${S.map((s) => `<i style="height:${((ZM[z][s] - 35) / 45) * 100}%;background:${col(ZM[z][s])}" data-t="${s}: ${f1(ZM[z][s])} dB"></i>`).join("")}</div></div>`;
+          })
+          .join("");
+      }
+      $("pills").innerHTML = PL.map(
+        (p) => `<button class="chip ${p == pick ? "on" : ""}">${p}</button>`,
+      ).join("");
+      $("pills").onclick = (e) => {
+        const b = e.target.closest(".chip");
+        if (!b) return;
+        pick = b.textContent;
+        document
+          .querySelectorAll("#pills .chip")
+          .forEach((x) => x.classList.toggle("on", x === b));
+        pod();
+      };
+      pod();
+      // reveal + counters + bars
+      const io = new IntersectionObserver(
+        (es) =>
+          es.forEach((e) => {
+            if (!e.isIntersecting) return;
+            e.target.classList.add("in");
+            e.target
+              .querySelectorAll(".fill")
+              .forEach((f) => (f.style.height = f.dataset.h + "%"));
+            e.target
+              .querySelectorAll(".zt i")
+              .forEach((i) => (i.style.width = i.dataset.w + "%"));
+            io.unobserve(e.target);
+          }),
+        { threshold: 0.15 },
+      );
+      document.querySelectorAll(".rv").forEach((x) => io.observe(x));
+      document.querySelectorAll("[data-n]").forEach((el) => {
+        const t = +el.dataset.n,
+          dec = t % 1 ? 1 : 0,
+          T = document.body.classList.contains("calm") ? 1 : 1400,
+          t0 = performance.now();
+        (function s(n) {
+          const p = Math.min(1, (n - t0) / T);
+          el.textContent = (t * (1 - Math.pow(1 - p, 3))).toFixed(dec);
+          if (p < 1) requestAnimationFrame(s);
+        })(t0);
+      });
+      addEventListener("scroll", () => {
+        $("prog").style.width =
+          (scrollY / (document.body.scrollHeight - innerHeight)) * 100 + "%";
+      });
+      // motion switch (defaults to ON whatever the OS setting is; the choice is remembered)
+      const mo = $("mo"),
+        setMo = (on) => {
+          document.body.classList.toggle("calm", !on);
+          mo.textContent = "Motion: " + (on ? "on" : "off");
+          try {
+            localStorage.setItem("mo", on ? "1" : "0");
+          } catch (e) {}
+        };
+      setMo(
+        (() => {
+          try {
+            return localStorage.getItem("mo") !== "0";
+          } catch (e) {
+            return true;
+          }
+        })(),
+      );
+      mo.onclick = () => setMo(document.body.classList.contains("calm"));
+      // hero background video: horizontal mouse movement scrubs it (no autoplay)
+      const vid = $("bgv"),
+        SENSITIVITY = 0.8;
+      let prevX = null,
+        targetTime = 0,
+        seeking = false;
+      function seek() {
+        if (
+          seeking ||
+          !vid.duration ||
+          Math.abs(vid.currentTime - targetTime) < 0.01
+        )
+          return;
+        seeking = true;
+        vid.currentTime = targetTime;
+      }
+      vid.addEventListener("seeked", () => {
+        seeking = false;
+        if (Math.abs(vid.currentTime - targetTime) > 0.01) seek();
+      });
+      vid.addEventListener("loadedmetadata", () => {
+        vid.pause();
+        targetTime = vid.currentTime;
+      });
+      function scrub(x) {
+        if (prevX === null) {
+          prevX = x;
+          return;
+        }
+        const delta = x - prevX;
+        prevX = x;
+        if (!vid.duration) return;
+        targetTime = Math.min(
+          vid.duration,
+          Math.max(
+            0,
+            targetTime +
+              (delta / window.innerWidth) * SENSITIVITY * vid.duration,
+          ),
+        );
+        seek();
+      }
+      window.addEventListener("mousemove", (e) => scrub(e.clientX));
+      window.addEventListener("touchmove", (e) => scrub(e.touches[0].clientX), {
+        passive: true,
+      });
+      window.addEventListener("touchend", () => {
+        prevX = null;
+      });
+    </script>
+  </body>
+</html>

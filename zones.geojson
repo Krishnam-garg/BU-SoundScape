@@ -1,0 +1,280 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.583811, 28.449289],
+            [77.582679, 28.448657],
+            [77.582854, 28.448408],
+            [77.583231, 28.448605],
+            [77.583343, 28.448444],
+            [77.583742, 28.448667],
+            [77.583636, 28.448823],
+            [77.583988, 28.449031],
+            [77.583811, 28.449289]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "N Block",
+        "zone_category": "Academic"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.583591, 28.450627],
+            [77.58408, 28.449992],
+            [77.584476, 28.450207],
+            [77.584004, 28.450854],
+            [77.584004, 28.450854],
+            [77.583591, 28.450627]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "A Block",
+        "zone_category": "Academic"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.584621, 28.450327],
+            [77.586396, 28.451309],
+            [77.585908, 28.451966],
+            [77.584133, 28.450994],
+            [77.584621, 28.450327]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "Boy's Hostel",
+        "zone_category": "Residential"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.584578, 28.450059],
+            [77.584187, 28.44983],
+            [77.584692, 28.449156],
+            [77.585076, 28.449383],
+            [77.584578, 28.450059]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "B Block",
+        "zone_category": "Academic"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.58521, 28.449489],
+            [77.586222, 28.450061],
+            [77.585723, 28.450741],
+            [77.584692, 28.450197],
+            [77.58521, 28.449489]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "Girl's Hostel",
+        "zone_category": "Residential"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.586248, 28.450098],
+            [77.586896, 28.450469],
+            [77.58641, 28.451132],
+            [77.585747, 28.45079],
+            [77.586248, 28.450098]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "Gobble Mess",
+        "zone_category": "Commercial"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.586947, 28.450236],
+            [77.587442, 28.449555],
+            [77.587977, 28.449866],
+            [77.587493, 28.450564],
+            [77.586947, 28.450236]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "Sports Complex",
+        "zone_category": "Recreational"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.583952, 28.449377],
+            [77.584053, 28.449237],
+            [77.584358, 28.44941],
+            [77.584256, 28.449552],
+            [77.583952, 28.449377]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "LRC",
+        "zone_category": "Silence Zone"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.583829, 28.449563],
+            [77.583679, 28.44948],
+            [77.583914, 28.449146],
+            [77.584064, 28.449226],
+            [77.583829, 28.449563]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "Paid<br>Mess",
+        "zone_category": "Commercial"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.583273, 28.449596],
+            [77.582443, 28.449112],
+            [77.58265, 28.448844],
+            [77.583462, 28.449324],
+            [77.583273, 28.449596]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "German<br>Hanger",
+        "zone_category": "Recreational"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.583325, 28.449891],
+            [77.58315, 28.4501],
+            [77.582787, 28.44988],
+            [77.582647, 28.450061],
+            [77.582252, 28.449835],
+            [77.582394, 28.449645],
+            [77.582061, 28.449448],
+            [77.582235, 28.449231],
+            [77.583325, 28.449891]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "P Block",
+        "zone_category": "Academic"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.586951, 28.450232],
+            [77.585779, 28.449599],
+            [77.586247, 28.448882],
+            [77.587444, 28.449557],
+            [77.586951, 28.450232]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "Sports Field",
+        "zone_category": "Recreational"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.586895, 28.451359],
+            [77.586468, 28.451116],
+            [77.58672, 28.450759],
+            [77.58716, 28.451019],
+            [77.586895, 28.451359]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "Sports Area",
+        "zone_category": "Recreational"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.584354, 28.449409],
+            [77.583906, 28.449142],
+            [77.584122, 28.448866],
+            [77.584569, 28.449131],
+            [77.584354, 28.449409]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "M Block",
+        "zone_category": "Administrative"
+      }
+    }
+  ]
+}
