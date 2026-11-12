@@ -113,16 +113,6 @@
       nav div a:hover {
         color: var(--tx);
       }
-      #prog {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 3px;
-        background: var(--acc);
-        box-shadow: 0 0 12px var(--acc);
-        z-index: 60;
-        width: 0;
-      }
       #hero {
         position: relative;
         z-index: 1;
@@ -246,12 +236,12 @@
       }
       .stat big {
         font-family: Unbounded, sans-serif;
-        font-size: 34px;
+        font-size: clamp(36px, 4.2vw, 56px);
         color: var(--acc);
         display: block;
         line-height: 1;
       }
-      .stat span {
+      .stat > span {
         font-size: 13px;
         color: var(--mut);
       }
@@ -642,41 +632,129 @@
           grid-template-columns: 90px 1fr 46px;
         }
       }
-      .calm * {
-        transition: none !important;
-        animation: none !important;
+
+      /* ---------- scroll animations ---------- */
+      .stat small.u {
+        font-size: 0.34em;
+        color: var(--mut);
+        font-weight: 700;
+        margin-left: 4px;
+        letter-spacing: 0;
       }
-      .calm .rv {
+      .stat {
+        animation: cardIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+      }
+      .stat:nth-child(2) {
+        animation-delay: 0.12s;
+      }
+      .stat:nth-child(3) {
+        animation-delay: 0.24s;
+      }
+      .stat:nth-child(4) {
+        animation-delay: 0.36s;
+      }
+      @keyframes cardIn {
+        from {
+          opacity: 0;
+          transform: translateY(40px) scale(0.96);
+        }
+      }
+      .rv[data-a="left"] {
+        transform: translateX(-70px);
+      }
+      .rv[data-a="right"] {
+        transform: translateX(70px);
+      }
+      .rv[data-a="zoom"] {
+        transform: scale(0.93);
+      }
+      h2.rv {
+        opacity: 0;
+        transform: translateY(34px);
+        filter: blur(12px);
+        letter-spacing: 0.06em;
+        transition:
+          opacity 0.9s,
+          transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1),
+          filter 0.9s,
+          letter-spacing 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      h2.rv.in {
+        opacity: 1;
+        transform: none;
+        filter: none;
+        letter-spacing: -0.03em;
+      }
+      .rv.in,
+      .rv[data-a].in {
         opacity: 1;
         transform: none;
       }
-      #mo {
-        margin-left: 22px;
-        border: 1px solid var(--ln);
-        background: none;
-        color: var(--mut);
-        font: inherit;
-        font-size: 12px;
-        padding: 5px 11px;
-        cursor: pointer;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+      .eye.rv:before {
+        width: 0;
+        transition: width 0.9s 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
       }
-      #mo:hover {
-        color: var(--acc);
-        border-color: var(--acc);
+      .eye.rv.in:before {
+        width: 34px;
+      }
+      .rv.in .hm td {
+        animation: cellIn 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s)
+          backwards;
+      }
+      @keyframes cellIn {
+        from {
+          opacity: 0;
+          transform: scale(0.4);
+        }
+      }
+      .rv.in #lines path[pathLength] {
+        stroke-dasharray: 1;
+        animation: draw 1.8s cubic-bezier(0.3, 0.6, 0.2, 1) backwards;
+      }
+      .rv.in #lines circle {
+        animation: dotIn 0.4s 1.4s backwards;
+      }
+      @keyframes draw {
+        from {
+          stroke-dashoffset: 1;
+        }
+      }
+      @keyframes dotIn {
+        from {
+          opacity: 0;
+          r: 0;
+        }
+      }
+      .pod .pc {
+        animation: cardIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+      }
+      .pod .pc:nth-child(2) {
+        animation-delay: 0.09s;
+      }
+      .pod .pc:nth-child(3) {
+        animation-delay: 0.18s;
+      }
+      .ck {
+        transition:
+          transform 0.25s,
+          background 0.25s;
+      }
+      .ck:hover {
+        transform: translateX(6px);
+      }
+      #hero .copy,
+      #hero .in {
+        will-change: transform, opacity;
       }
     </style>
   </head>
   <body>
-    <div id="prog"></div>
     <nav>
       <b>BU<i>·</i>SoundScape</b>
       <div>
         <a href="#map">Map</a><a href="#who">WHO</a><a href="#data">Analytics</a
         ><a href="#impact">Impact</a><a href="#act">Solutions</a
-        ><a href="#study">Study spots</a
-        ><button id="mo" title="Turn page animations on or off"></button>
+        ><a href="#study">Study spots</a>
       </div>
     </nav>
     <video
@@ -789,8 +867,8 @@
         <div class="eye rv">Why it matters</div>
         <h2 class="rv">What noise does<br />to students</h2>
         <p class="lead rv">
-          Our Campus levels rarely reach damaging-to-hearing territory, but
-          chronic noise still costs us sleep, focus and calm.
+          Hover a card. Our Campus levels rarely reach damaging-to-hearing
+          territory, but chronic noise still costs us sleep, focus and calm.
         </p>
         <div class="imp" id="imp"></div>
       </section>
@@ -854,7 +932,317 @@
     </div>
     <div class="tip" id="tip"></div>
     <script>
-      const D = {"rows": [["A Block", "Afternoon", 45.3, "ABlock-1"], ["A Block", "Evening", 47.4, "ABlock-1"], ["A Block", "Midnight", 46.1, "ABlock-1"], ["A Block", "Morning", 46.5, "ABlock-1"], ["A Block", "Night", 46.8, "ABlock-1"], ["A Block", "Afternoon", 46.8, "ABlock-2"], ["A Block", "Evening", 46.2, "ABlock-2"], ["A Block", "Midnight", 46.1, "ABlock-2"], ["A Block", "Morning", 45.1, "ABlock-2"], ["A Block", "Night", 46.1, "ABlock-2"], ["A Block", "Afternoon", 44.0, "ABlock-3"], ["A Block", "Evening", 42.8, "ABlock-3"], ["A Block", "Midnight", 44.6, "ABlock-3"], ["A Block", "Morning", 44.8, "ABlock-3"], ["A Block", "Night", 46.0, "ABlock-3"], ["A Block", "Afternoon", 44.4, "ABlock-4"], ["A Block", "Evening", 46.6, "ABlock-4"], ["A Block", "Midnight", 45.2, "ABlock-4"], ["A Block", "Morning", 44.1, "ABlock-4"], ["A Block", "Night", 44.1, "ABlock-4"], ["B Block", "Afternoon", 47.8, "BBlock-1"], ["B Block", "Evening", 47.8, "BBlock-1"], ["B Block", "Midnight", 49.6, "BBlock-1"], ["B Block", "Morning", 44.6, "BBlock-1"], ["B Block", "Night", 47.8, "BBlock-1"], ["B Block", "Afternoon", 47.6, "BBlock-2"], ["B Block", "Evening", 46.0, "BBlock-2"], ["B Block", "Midnight", 38.1, "BBlock-2"], ["B Block", "Morning", 43.0, "BBlock-2"], ["B Block", "Night", 47.6, "BBlock-2"], ["B Block", "Afternoon", 49.4, "BBlock-3"], ["B Block", "Evening", 48.9, "BBlock-3"], ["B Block", "Midnight", 45.4, "BBlock-3"], ["B Block", "Morning", 46.6, "BBlock-3"], ["B Block", "Night", 49.5, "BBlock-3"], ["B Block", "Afternoon", 47.9, "BBlock-4"], ["B Block", "Evening", 49.2, "BBlock-4"], ["B Block", "Midnight", 46.1, "BBlock-4"], ["B Block", "Morning", 49.0, "BBlock-4"], ["B Block", "Night", 50.0, "BBlock-4"], ["Walkway", "Afternoon", 53.5, "Ww-1"], ["Walkway", "Evening", 69.2, "Ww-1"], ["Walkway", "Midnight", 69.9, "Ww-1"], ["Walkway", "Morning", 43.5, "Ww-1"], ["Walkway", "Night", 61.5, "Ww-1"], ["Boy's Hostel", "Afternoon", 57.0, "BoyHost-2"], ["Boy's Hostel", "Evening", 73.2, "BoyHost-2"], ["Boy's Hostel", "Midnight", 68.6, "BoyHost-2"], ["Boy's Hostel", "Morning", 46.3, "BoyHost-2"], ["Boy's Hostel", "Night", 65.0, "BoyHost-2"], ["Girl's Hostel", "Afternoon", 56.2, "GirlHost-3"], ["Girl's Hostel", "Evening", 56.2, "GirlHost-3"], ["Girl's Hostel", "Midnight", 56.2, "GirlHost-3"], ["Girl's Hostel", "Morning", 56.2, "GirlHost-3"], ["Girl's Hostel", "Night", 56.2, "GirlHost-3"], ["Boy's Hostel", "Afternoon", 53.5, "BoysHost-1"], ["Boy's Hostel", "Evening", 69.2, "BoysHost-1"], ["Boy's Hostel", "Midnight", 69.9, "BoysHost-1"], ["Boy's Hostel", "Morning", 43.5, "BoysHost-1"], ["Boy's Hostel", "Night", 61.5, "BoysHost-1"], ["Boy's Hostel", "Afternoon", 57.0, "BoysHost-2"], ["Boy's Hostel", "Evening", 73.2, "BoysHost-2"], ["Boy's Hostel", "Midnight", 68.6, "BoysHost-2"], ["Boy's Hostel", "Morning", 46.3, "BoysHost-2"], ["Boy's Hostel", "Night", 65.0, "BoysHost-2"], ["Boy's Hostel", "Afternoon", 55.1, "BoysHost-3"], ["Boy's Hostel", "Evening", 69.5, "BoysHost-3"], ["Boy's Hostel", "Midnight", 72.6, "BoysHost-3"], ["Boy's Hostel", "Morning", 45.7, "BoysHost-3"], ["Boy's Hostel", "Night", 63.3, "BoysHost-3"], ["E Block", "Afternoon", 51.6, "EBlock-1"], ["E Block", "Evening", 41.8, "EBlock-1"], ["E Block", "Midnight", 42.0, "EBlock-1"], ["E Block", "Morning", 51.7, "EBlock-1"], ["E Block", "Night", 41.5, "EBlock-1"], ["E Block", "Afternoon", 57.7, "EBlock-2"], ["E Block", "Evening", 51.2, "EBlock-2"], ["E Block", "Midnight", 49.3, "EBlock-2"], ["E Block", "Morning", 56.5, "EBlock-2"], ["E Block", "Night", 47.3, "EBlock-2"], ["E Block", "Afternoon", 56.1, "EBlock-3"], ["E Block", "Evening", 49.7, "EBlock-3"], ["E Block", "Midnight", 46.4, "EBlock-3"], ["E Block", "Morning", 55.8, "EBlock-3"], ["E Block", "Night", 47.4, "EBlock-3"], ["German Hanger", "Afternoon", 44.8, "GermanHa-1"], ["German Hanger", "Evening", 48.0, "GermanHa-1"], ["German Hanger", "Midnight", 45.3, "GermanHa-1"], ["German Hanger", "Morning", 44.8, "GermanHa-1"], ["German Hanger", "Night", 45.8, "GermanHa-1"], ["German Hanger", "Afternoon", 46.8, "GermanHa-2"], ["German Hanger", "Evening", 46.1, "GermanHa-2"], ["German Hanger", "Midnight", 44.3, "GermanHa-2"], ["German Hanger", "Morning", 48.6, "GermanHa-2"], ["German Hanger", "Night", 45.9, "GermanHa-2"], ["German Hanger", "Afternoon", 47.5, "GermanHa-3"], ["German Hanger", "Evening", 47.8, "GermanHa-3"], ["German Hanger", "Midnight", 43.8, "GermanHa-3"], ["German Hanger", "Morning", 45.7, "GermanHa-3"], ["German Hanger", "Night", 47.1, "GermanHa-3"], ["Girl's Hostel", "Afternoon", 56.2, "GirlsHos-1"], ["Girl's Hostel", "Evening", 56.2, "GirlsHos-1"], ["Girl's Hostel", "Midnight", 56.2, "GirlsHos-1"], ["Girl's Hostel", "Morning", 56.2, "GirlsHos-1"], ["Girl's Hostel", "Night", 56.2, "GirlsHos-1"], ["Girl's Hostel", "Afternoon", 55.8, "GirlsHos-2"], ["Girl's Hostel", "Evening", 56.6, "GirlsHos-2"], ["Girl's Hostel", "Midnight", 43.5, "GirlsHos-2"], ["Girl's Hostel", "Morning", 43.9, "GirlsHos-2"], ["Girl's Hostel", "Night", 54.9, "GirlsHos-2"], ["Girl's Hostel", "Afternoon", 56.0, "GirlsHos-3"], ["Girl's Hostel", "Evening", 54.2, "GirlsHos-3"], ["Girl's Hostel", "Midnight", 46.1, "GirlsHos-3"], ["Girl's Hostel", "Morning", 47.0, "GirlsHos-3"], ["Girl's Hostel", "Night", 54.4, "GirlsHos-3"], ["Gobble Mess", "Afternoon", 73.5, "GobbleMe-1"], ["Gobble Mess", "Evening", 72.5, "GobbleMe-1"], ["Gobble Mess", "Midnight", 44.7, "GobbleMe-1"], ["Gobble Mess", "Morning", 60.7, "GobbleMe-1"], ["Gobble Mess", "Night", 48.6, "GobbleMe-1"], ["Gobble Mess", "Afternoon", 70.7, "GobbleMe-2"], ["Gobble Mess", "Evening", 73.6, "GobbleMe-2"], ["Gobble Mess", "Midnight", 44.6, "GobbleMe-2"], ["Gobble Mess", "Morning", 64.7, "GobbleMe-2"], ["Gobble Mess", "Night", 45.7, "GobbleMe-2"], ["Gobble Mess", "Afternoon", 73.6, "GobbleMe-3"], ["Gobble Mess", "Evening", 73.5, "GobbleMe-3"], ["Gobble Mess", "Midnight", 45.1, "GobbleMe-3"], ["Gobble Mess", "Morning", 66.7, "GobbleMe-3"], ["Gobble Mess", "Night", 46.6, "GobbleMe-3"], ["Gobble Mess", "Afternoon", 72.6, "GobbleMe-4"], ["Gobble Mess", "Evening", 71.4, "GobbleMe-4"], ["Gobble Mess", "Midnight", 48.0, "GobbleMe-4"], ["Gobble Mess", "Morning", 63.4, "GobbleMe-4"], ["Gobble Mess", "Night", 47.1, "GobbleMe-4"], ["LRC", "Afternoon", 47.5, "LRC-1"], ["LRC", "Evening", 59.0, "LRC-1"], ["LRC", "Midnight", 45.3, "LRC-1"], ["LRC", "Morning", 47.7, "LRC-1"], ["LRC", "Night", 48.4, "LRC-1"], ["LRC", "Afternoon", 42.9, "LRC-2"], ["LRC", "Evening", 50.1, "LRC-2"], ["LRC", "Midnight", 39.7, "LRC-2"], ["LRC", "Morning", 41.2, "LRC-2"], ["LRC", "Night", 42.0, "LRC-2"], ["LRC", "Afternoon", 45.9, "LRC-3"], ["LRC", "Evening", 57.1, "LRC-3"], ["LRC", "Midnight", 47.0, "LRC-3"], ["LRC", "Morning", 47.5, "LRC-3"], ["LRC", "Night", 47.3, "LRC-3"], ["LRC", "Afternoon", 47.2, "LRC-4"], ["LRC", "Evening", 56.8, "LRC-4"], ["LRC", "Midnight", 43.0, "LRC-4"], ["LRC", "Morning", 41.2, "LRC-4"], ["LRC", "Night", 45.9, "LRC-4"], ["M Block", "Afternoon", 56.9, "MBlock-1"], ["M Block", "Evening", 50.3, "MBlock-1"], ["M Block", "Midnight", 44.3, "MBlock-1"], ["M Block", "Morning", 51.1, "MBlock-1"], ["M Block", "Night", 48.7, "MBlock-1"], ["M Block", "Afternoon", 49.6, "MBlock-2"], ["M Block", "Evening", 44.3, "MBlock-2"], ["M Block", "Midnight", 40.5, "MBlock-2"], ["M Block", "Morning", 45.5, "MBlock-2"], ["M Block", "Night", 38.7, "MBlock-2"], ["M Block", "Afternoon", 56.4, "MBlock-3"], ["M Block", "Evening", 49.2, "MBlock-3"], ["M Block", "Midnight", 45.9, "MBlock-3"], ["M Block", "Morning", 49.5, "MBlock-3"], ["M Block", "Night", 50.2, "MBlock-3"], ["N Block", "Afternoon", 65.5, "NBlock-1"], ["N Block", "Evening", 65.4, "NBlock-1"], ["N Block", "Midnight", 48.4, "NBlock-1"], ["N Block", "Morning", 58.3, "NBlock-1"], ["N Block", "Night", 50.9, "NBlock-1"], ["N Block", "Afternoon", 63.9, "NBlock-2"], ["N Block", "Evening", 62.3, "NBlock-2"], ["N Block", "Midnight", 43.8, "NBlock-2"], ["N Block", "Morning", 57.1, "NBlock-2"], ["N Block", "Night", 44.4, "NBlock-2"], ["N Block", "Afternoon", 64.1, "NBlock-3"], ["N Block", "Evening", 61.4, "NBlock-3"], ["N Block", "Midnight", 42.3, "NBlock-3"], ["N Block", "Morning", 53.8, "NBlock-3"], ["N Block", "Night", 48.1, "NBlock-3"], ["Paid Mess", "Afternoon", 64.4, "PaidMess-1"], ["Paid Mess", "Evening", 63.6, "PaidMess-1"], ["Paid Mess", "Midnight", 53.5, "PaidMess-1"], ["Paid Mess", "Morning", 61.4, "PaidMess-1"], ["Paid Mess", "Night", 55.2, "PaidMess-1"], ["Paid Mess", "Afternoon", 66.1, "PaidMess-2"], ["Paid Mess", "Evening", 64.6, "PaidMess-2"], ["Paid Mess", "Midnight", 50.3, "PaidMess-2"], ["Paid Mess", "Morning", 63.4, "PaidMess-2"], ["Paid Mess", "Night", 52.1, "PaidMess-2"], ["Paid Mess", "Afternoon", 66.5, "PaidMess-3"], ["Paid Mess", "Evening", 66.2, "PaidMess-3"], ["Paid Mess", "Midnight", 54.4, "PaidMess-3"], ["Paid Mess", "Morning", 63.4, "PaidMess-3"], ["Paid Mess", "Night", 58.6, "PaidMess-3"], ["P Block", "Afternoon", 59.7, "PBlock-1"], ["P Block", "Evening", 63.4, "PBlock-1"], ["P Block", "Midnight", 42.9, "PBlock-1"], ["P Block", "Morning", 54.2, "PBlock-1"], ["P Block", "Night", 42.8, "PBlock-1"], ["P Block", "Afternoon", 64.3, "PBlock-2"], ["P Block", "Evening", 61.5, "PBlock-2"], ["P Block", "Midnight", 45.4, "PBlock-2"], ["P Block", "Morning", 54.5, "PBlock-2"], ["P Block", "Night", 46.4, "PBlock-2"], ["P Block", "Afternoon", 64.6, "PBlock-3"], ["P Block", "Evening", 68.3, "PBlock-3"], ["P Block", "Midnight", 41.7, "PBlock-3"], ["P Block", "Morning", 53.9, "PBlock-3"], ["P Block", "Night", 48.5, "PBlock-3"], ["Walkway A&B", "Afternoon", 68.6, "roadbwAa-1"], ["Walkway A&B", "Evening", 72.9, "roadbwAa-1"], ["Walkway A&B", "Midnight", 62.0, "roadbwAa-1"], ["Walkway A&B", "Morning", 54.7, "roadbwAa-1"], ["Walkway A&B", "Night", 61.5, "roadbwAa-1"], ["Walkway A&B", "Afternoon", 72.5, "roadbwAa-2"], ["Walkway A&B", "Evening", 72.4, "roadbwAa-2"], ["Walkway A&B", "Midnight", 64.2, "roadbwAa-2"], ["Walkway A&B", "Morning", 56.3, "roadbwAa-2"], ["Walkway A&B", "Night", 64.6, "roadbwAa-2"], ["Walkway A&B", "Afternoon", 70.4, "roadbwAa-3"], ["Walkway A&B", "Evening", 68.4, "roadbwAa-3"], ["Walkway A&B", "Midnight", 59.0, "roadbwAa-3"], ["Walkway A&B", "Morning", 53.7, "roadbwAa-3"], ["Walkway A&B", "Night", 66.4, "roadbwAa-3"], ["Walkway A&B", "Afternoon", 71.2, "roadbwAa-4"], ["Walkway A&B", "Evening", 72.1, "roadbwAa-4"], ["Walkway A&B", "Midnight", 60.8, "roadbwAa-4"], ["Walkway A&B", "Morning", 49.8, "roadbwAa-4"], ["Walkway A&B", "Night", 60.3, "roadbwAa-4"], ["Sports Area", "Afternoon", 46.2, "SportsAr-1"], ["Sports Area", "Evening", 55.6, "SportsAr-1"], ["Sports Area", "Midnight", 43.4, "SportsAr-1"], ["Sports Area", "Morning", 47.9, "SportsAr-1"], ["Sports Area", "Night", 45.3, "SportsAr-1"], ["Sports Area", "Afternoon", 46.2, "SportsAr-2"], ["Sports Area", "Evening", 50.8, "SportsAr-2"], ["Sports Area", "Midnight", 40.4, "SportsAr-2"], ["Sports Area", "Morning", 50.2, "SportsAr-2"], ["Sports Area", "Night", 46.3, "SportsAr-2"], ["Sports Area", "Afternoon", 43.1, "SportsAr-3"], ["Sports Area", "Evening", 52.5, "SportsAr-3"], ["Sports Area", "Midnight", 38.7, "SportsAr-3"], ["Sports Area", "Morning", 42.6, "SportsAr-3"], ["Sports Area", "Night", 43.2, "SportsAr-3"], ["Sports Area", "Afternoon", 48.6, "SportsAr-4"], ["Sports Area", "Evening", 56.0, "SportsAr-4"], ["Sports Area", "Midnight", 44.7, "SportsAr-4"], ["Sports Area", "Morning", 46.7, "SportsAr-4"], ["Sports Area", "Night", 45.3, "SportsAr-4"], ["Sports Complex", "Afternoon", 59.1, "SportsCo-1"], ["Sports Complex", "Evening", 71.7, "SportsCo-1"], ["Sports Complex", "Midnight", 49.0, "SportsCo-1"], ["Sports Complex", "Morning", 73.0, "SportsCo-1"], ["Sports Complex", "Night", 52.5, "SportsCo-1"], ["Sports Complex", "Afternoon", 61.2, "SportsCo-2"], ["Sports Complex", "Evening", 68.4, "SportsCo-2"], ["Sports Complex", "Midnight", 48.0, "SportsCo-2"], ["Sports Complex", "Morning", 68.0, "SportsCo-2"], ["Sports Complex", "Night", 49.2, "SportsCo-2"], ["Sports Complex", "Afternoon", 54.6, "SportsCo-3"], ["Sports Complex", "Evening", 67.2, "SportsCo-3"], ["Sports Complex", "Midnight", 47.0, "SportsCo-3"], ["Sports Complex", "Morning", 64.5, "SportsCo-3"], ["Sports Complex", "Night", 48.5, "SportsCo-3"], ["Sports Complex", "Afternoon", 53.3, "SportsCo-4"], ["Sports Complex", "Evening", 63.3, "SportsCo-4"], ["Sports Complex", "Midnight", 40.3, "SportsCo-4"], ["Sports Complex", "Morning", 63.1, "SportsCo-4"], ["Sports Complex", "Night", 45.0, "SportsCo-4"], ["Sports Field", "Afternoon", 40.9, "SportsFi-1"], ["Sports Field", "Evening", 51.7, "SportsFi-1"], ["Sports Field", "Midnight", 39.2, "SportsFi-1"], ["Sports Field", "Morning", 38.2, "SportsFi-1"], ["Sports Field", "Night", 41.4, "SportsFi-1"], ["Sports Field", "Afternoon", 46.9, "SportsFi-2"], ["Sports Field", "Evening", 56.7, "SportsFi-2"], ["Sports Field", "Midnight", 41.4, "SportsFi-2"], ["Sports Field", "Morning", 43.0, "SportsFi-2"], ["Sports Field", "Night", 44.0, "SportsFi-2"], ["Sports Field", "Afternoon", 48.4, "SportsFi-3"], ["Sports Field", "Evening", 62.7, "SportsFi-3"], ["Sports Field", "Midnight", 46.9, "SportsFi-3"], ["Sports Field", "Morning", 46.7, "SportsFi-3"], ["Sports Field", "Night", 46.5, "SportsFi-3"]], "cat": {"N Block": "Academic", "A Block": "Academic", "Boy's Hostel": "Residential", "B Block": "Academic", "Girl's Hostel": "Residential", "Gobble Mess": "Commercial", "Sports Complex": "Recreational", "LRC": "Silence Zone", "Paid Mess": "Commercial", "German Hanger": "Recreational", "P Block": "Academic", "Sports Field": "Recreational", "Sports Area": "Recreational", "M Block": "Administrative"}, "study": ["Academic", "Silence Zone", "Administrative"]},
+      const D = {
+          rows: [
+            ["A Block", "Afternoon", 45.3, "ABlock-1"],
+            ["A Block", "Evening", 47.4, "ABlock-1"],
+            ["A Block", "Midnight", 46.1, "ABlock-1"],
+            ["A Block", "Morning", 46.5, "ABlock-1"],
+            ["A Block", "Night", 46.8, "ABlock-1"],
+            ["A Block", "Afternoon", 46.8, "ABlock-2"],
+            ["A Block", "Evening", 46.2, "ABlock-2"],
+            ["A Block", "Midnight", 46.1, "ABlock-2"],
+            ["A Block", "Morning", 45.1, "ABlock-2"],
+            ["A Block", "Night", 46.1, "ABlock-2"],
+            ["A Block", "Afternoon", 44.0, "ABlock-3"],
+            ["A Block", "Evening", 42.8, "ABlock-3"],
+            ["A Block", "Midnight", 44.6, "ABlock-3"],
+            ["A Block", "Morning", 44.8, "ABlock-3"],
+            ["A Block", "Night", 46.0, "ABlock-3"],
+            ["A Block", "Afternoon", 44.4, "ABlock-4"],
+            ["A Block", "Evening", 46.6, "ABlock-4"],
+            ["A Block", "Midnight", 45.2, "ABlock-4"],
+            ["A Block", "Morning", 44.1, "ABlock-4"],
+            ["A Block", "Night", 44.1, "ABlock-4"],
+            ["B Block", "Afternoon", 47.8, "BBlock-1"],
+            ["B Block", "Evening", 47.8, "BBlock-1"],
+            ["B Block", "Midnight", 49.6, "BBlock-1"],
+            ["B Block", "Morning", 44.6, "BBlock-1"],
+            ["B Block", "Night", 47.8, "BBlock-1"],
+            ["B Block", "Afternoon", 47.6, "BBlock-2"],
+            ["B Block", "Evening", 46.0, "BBlock-2"],
+            ["B Block", "Midnight", 38.1, "BBlock-2"],
+            ["B Block", "Morning", 43.0, "BBlock-2"],
+            ["B Block", "Night", 47.6, "BBlock-2"],
+            ["B Block", "Afternoon", 49.4, "BBlock-3"],
+            ["B Block", "Evening", 48.9, "BBlock-3"],
+            ["B Block", "Midnight", 45.4, "BBlock-3"],
+            ["B Block", "Morning", 46.6, "BBlock-3"],
+            ["B Block", "Night", 49.5, "BBlock-3"],
+            ["B Block", "Afternoon", 47.9, "BBlock-4"],
+            ["B Block", "Evening", 49.2, "BBlock-4"],
+            ["B Block", "Midnight", 46.1, "BBlock-4"],
+            ["B Block", "Morning", 49.0, "BBlock-4"],
+            ["B Block", "Night", 50.0, "BBlock-4"],
+            ["Walkway", "Afternoon", 53.5, "Ww-1"],
+            ["Walkway", "Evening", 69.2, "Ww-1"],
+            ["Walkway", "Midnight", 69.9, "Ww-1"],
+            ["Walkway", "Morning", 43.5, "Ww-1"],
+            ["Walkway", "Night", 61.5, "Ww-1"],
+            ["Boy's Hostel", "Afternoon", 57.0, "BoyHost-2"],
+            ["Boy's Hostel", "Evening", 73.2, "BoyHost-2"],
+            ["Boy's Hostel", "Midnight", 68.6, "BoyHost-2"],
+            ["Boy's Hostel", "Morning", 46.3, "BoyHost-2"],
+            ["Boy's Hostel", "Night", 65.0, "BoyHost-2"],
+            ["Girl's Hostel", "Afternoon", 56.2, "GirlHost-3"],
+            ["Girl's Hostel", "Evening", 56.2, "GirlHost-3"],
+            ["Girl's Hostel", "Midnight", 56.2, "GirlHost-3"],
+            ["Girl's Hostel", "Morning", 56.2, "GirlHost-3"],
+            ["Girl's Hostel", "Night", 56.2, "GirlHost-3"],
+            ["Boy's Hostel", "Afternoon", 53.5, "BoysHost-1"],
+            ["Boy's Hostel", "Evening", 69.2, "BoysHost-1"],
+            ["Boy's Hostel", "Midnight", 69.9, "BoysHost-1"],
+            ["Boy's Hostel", "Morning", 43.5, "BoysHost-1"],
+            ["Boy's Hostel", "Night", 61.5, "BoysHost-1"],
+            ["Boy's Hostel", "Afternoon", 57.0, "BoysHost-2"],
+            ["Boy's Hostel", "Evening", 73.2, "BoysHost-2"],
+            ["Boy's Hostel", "Midnight", 68.6, "BoysHost-2"],
+            ["Boy's Hostel", "Morning", 46.3, "BoysHost-2"],
+            ["Boy's Hostel", "Night", 65.0, "BoysHost-2"],
+            ["Boy's Hostel", "Afternoon", 55.1, "BoysHost-3"],
+            ["Boy's Hostel", "Evening", 69.5, "BoysHost-3"],
+            ["Boy's Hostel", "Midnight", 72.6, "BoysHost-3"],
+            ["Boy's Hostel", "Morning", 45.7, "BoysHost-3"],
+            ["Boy's Hostel", "Night", 63.3, "BoysHost-3"],
+            ["E Block", "Afternoon", 51.6, "EBlock-1"],
+            ["E Block", "Evening", 41.8, "EBlock-1"],
+            ["E Block", "Midnight", 42.0, "EBlock-1"],
+            ["E Block", "Morning", 51.7, "EBlock-1"],
+            ["E Block", "Night", 41.5, "EBlock-1"],
+            ["E Block", "Afternoon", 57.7, "EBlock-2"],
+            ["E Block", "Evening", 51.2, "EBlock-2"],
+            ["E Block", "Midnight", 49.3, "EBlock-2"],
+            ["E Block", "Morning", 56.5, "EBlock-2"],
+            ["E Block", "Night", 47.3, "EBlock-2"],
+            ["E Block", "Afternoon", 56.1, "EBlock-3"],
+            ["E Block", "Evening", 49.7, "EBlock-3"],
+            ["E Block", "Midnight", 46.4, "EBlock-3"],
+            ["E Block", "Morning", 55.8, "EBlock-3"],
+            ["E Block", "Night", 47.4, "EBlock-3"],
+            ["German Hanger", "Afternoon", 44.8, "GermanHa-1"],
+            ["German Hanger", "Evening", 48.0, "GermanHa-1"],
+            ["German Hanger", "Midnight", 45.3, "GermanHa-1"],
+            ["German Hanger", "Morning", 44.8, "GermanHa-1"],
+            ["German Hanger", "Night", 45.8, "GermanHa-1"],
+            ["German Hanger", "Afternoon", 46.8, "GermanHa-2"],
+            ["German Hanger", "Evening", 46.1, "GermanHa-2"],
+            ["German Hanger", "Midnight", 44.3, "GermanHa-2"],
+            ["German Hanger", "Morning", 48.6, "GermanHa-2"],
+            ["German Hanger", "Night", 45.9, "GermanHa-2"],
+            ["German Hanger", "Afternoon", 47.5, "GermanHa-3"],
+            ["German Hanger", "Evening", 47.8, "GermanHa-3"],
+            ["German Hanger", "Midnight", 43.8, "GermanHa-3"],
+            ["German Hanger", "Morning", 45.7, "GermanHa-3"],
+            ["German Hanger", "Night", 47.1, "GermanHa-3"],
+            ["Girl's Hostel", "Afternoon", 56.2, "GirlsHos-1"],
+            ["Girl's Hostel", "Evening", 56.2, "GirlsHos-1"],
+            ["Girl's Hostel", "Midnight", 56.2, "GirlsHos-1"],
+            ["Girl's Hostel", "Morning", 56.2, "GirlsHos-1"],
+            ["Girl's Hostel", "Night", 56.2, "GirlsHos-1"],
+            ["Girl's Hostel", "Afternoon", 55.8, "GirlsHos-2"],
+            ["Girl's Hostel", "Evening", 56.6, "GirlsHos-2"],
+            ["Girl's Hostel", "Midnight", 43.5, "GirlsHos-2"],
+            ["Girl's Hostel", "Morning", 43.9, "GirlsHos-2"],
+            ["Girl's Hostel", "Night", 54.9, "GirlsHos-2"],
+            ["Girl's Hostel", "Afternoon", 56.0, "GirlsHos-3"],
+            ["Girl's Hostel", "Evening", 54.2, "GirlsHos-3"],
+            ["Girl's Hostel", "Midnight", 46.1, "GirlsHos-3"],
+            ["Girl's Hostel", "Morning", 47.0, "GirlsHos-3"],
+            ["Girl's Hostel", "Night", 54.4, "GirlsHos-3"],
+            ["Gobble Mess", "Afternoon", 73.5, "GobbleMe-1"],
+            ["Gobble Mess", "Evening", 72.5, "GobbleMe-1"],
+            ["Gobble Mess", "Midnight", 44.7, "GobbleMe-1"],
+            ["Gobble Mess", "Morning", 60.7, "GobbleMe-1"],
+            ["Gobble Mess", "Night", 48.6, "GobbleMe-1"],
+            ["Gobble Mess", "Afternoon", 70.7, "GobbleMe-2"],
+            ["Gobble Mess", "Evening", 73.6, "GobbleMe-2"],
+            ["Gobble Mess", "Midnight", 44.6, "GobbleMe-2"],
+            ["Gobble Mess", "Morning", 64.7, "GobbleMe-2"],
+            ["Gobble Mess", "Night", 45.7, "GobbleMe-2"],
+            ["Gobble Mess", "Afternoon", 73.6, "GobbleMe-3"],
+            ["Gobble Mess", "Evening", 73.5, "GobbleMe-3"],
+            ["Gobble Mess", "Midnight", 45.1, "GobbleMe-3"],
+            ["Gobble Mess", "Morning", 66.7, "GobbleMe-3"],
+            ["Gobble Mess", "Night", 46.6, "GobbleMe-3"],
+            ["Gobble Mess", "Afternoon", 72.6, "GobbleMe-4"],
+            ["Gobble Mess", "Evening", 71.4, "GobbleMe-4"],
+            ["Gobble Mess", "Midnight", 48.0, "GobbleMe-4"],
+            ["Gobble Mess", "Morning", 63.4, "GobbleMe-4"],
+            ["Gobble Mess", "Night", 47.1, "GobbleMe-4"],
+            ["LRC", "Afternoon", 47.5, "LRC-1"],
+            ["LRC", "Evening", 59.0, "LRC-1"],
+            ["LRC", "Midnight", 45.3, "LRC-1"],
+            ["LRC", "Morning", 47.7, "LRC-1"],
+            ["LRC", "Night", 48.4, "LRC-1"],
+            ["LRC", "Afternoon", 42.9, "LRC-2"],
+            ["LRC", "Evening", 50.1, "LRC-2"],
+            ["LRC", "Midnight", 39.7, "LRC-2"],
+            ["LRC", "Morning", 41.2, "LRC-2"],
+            ["LRC", "Night", 42.0, "LRC-2"],
+            ["LRC", "Afternoon", 45.9, "LRC-3"],
+            ["LRC", "Evening", 57.1, "LRC-3"],
+            ["LRC", "Midnight", 47.0, "LRC-3"],
+            ["LRC", "Morning", 47.5, "LRC-3"],
+            ["LRC", "Night", 47.3, "LRC-3"],
+            ["LRC", "Afternoon", 47.2, "LRC-4"],
+            ["LRC", "Evening", 56.8, "LRC-4"],
+            ["LRC", "Midnight", 43.0, "LRC-4"],
+            ["LRC", "Morning", 41.2, "LRC-4"],
+            ["LRC", "Night", 45.9, "LRC-4"],
+            ["M Block", "Afternoon", 56.9, "MBlock-1"],
+            ["M Block", "Evening", 50.3, "MBlock-1"],
+            ["M Block", "Midnight", 44.3, "MBlock-1"],
+            ["M Block", "Morning", 51.1, "MBlock-1"],
+            ["M Block", "Night", 48.7, "MBlock-1"],
+            ["M Block", "Afternoon", 49.6, "MBlock-2"],
+            ["M Block", "Evening", 44.3, "MBlock-2"],
+            ["M Block", "Midnight", 40.5, "MBlock-2"],
+            ["M Block", "Morning", 45.5, "MBlock-2"],
+            ["M Block", "Night", 38.7, "MBlock-2"],
+            ["M Block", "Afternoon", 56.4, "MBlock-3"],
+            ["M Block", "Evening", 49.2, "MBlock-3"],
+            ["M Block", "Midnight", 45.9, "MBlock-3"],
+            ["M Block", "Morning", 49.5, "MBlock-3"],
+            ["M Block", "Night", 50.2, "MBlock-3"],
+            ["N Block", "Afternoon", 65.5, "NBlock-1"],
+            ["N Block", "Evening", 65.4, "NBlock-1"],
+            ["N Block", "Midnight", 48.4, "NBlock-1"],
+            ["N Block", "Morning", 58.3, "NBlock-1"],
+            ["N Block", "Night", 50.9, "NBlock-1"],
+            ["N Block", "Afternoon", 63.9, "NBlock-2"],
+            ["N Block", "Evening", 62.3, "NBlock-2"],
+            ["N Block", "Midnight", 43.8, "NBlock-2"],
+            ["N Block", "Morning", 57.1, "NBlock-2"],
+            ["N Block", "Night", 44.4, "NBlock-2"],
+            ["N Block", "Afternoon", 64.1, "NBlock-3"],
+            ["N Block", "Evening", 61.4, "NBlock-3"],
+            ["N Block", "Midnight", 42.3, "NBlock-3"],
+            ["N Block", "Morning", 53.8, "NBlock-3"],
+            ["N Block", "Night", 48.1, "NBlock-3"],
+            ["Paid Mess", "Afternoon", 64.4, "PaidMess-1"],
+            ["Paid Mess", "Evening", 63.6, "PaidMess-1"],
+            ["Paid Mess", "Midnight", 53.5, "PaidMess-1"],
+            ["Paid Mess", "Morning", 61.4, "PaidMess-1"],
+            ["Paid Mess", "Night", 55.2, "PaidMess-1"],
+            ["Paid Mess", "Afternoon", 66.1, "PaidMess-2"],
+            ["Paid Mess", "Evening", 64.6, "PaidMess-2"],
+            ["Paid Mess", "Midnight", 50.3, "PaidMess-2"],
+            ["Paid Mess", "Morning", 63.4, "PaidMess-2"],
+            ["Paid Mess", "Night", 52.1, "PaidMess-2"],
+            ["Paid Mess", "Afternoon", 66.5, "PaidMess-3"],
+            ["Paid Mess", "Evening", 66.2, "PaidMess-3"],
+            ["Paid Mess", "Midnight", 54.4, "PaidMess-3"],
+            ["Paid Mess", "Morning", 63.4, "PaidMess-3"],
+            ["Paid Mess", "Night", 58.6, "PaidMess-3"],
+            ["P Block", "Afternoon", 59.7, "PBlock-1"],
+            ["P Block", "Evening", 63.4, "PBlock-1"],
+            ["P Block", "Midnight", 42.9, "PBlock-1"],
+            ["P Block", "Morning", 54.2, "PBlock-1"],
+            ["P Block", "Night", 42.8, "PBlock-1"],
+            ["P Block", "Afternoon", 64.3, "PBlock-2"],
+            ["P Block", "Evening", 61.5, "PBlock-2"],
+            ["P Block", "Midnight", 45.4, "PBlock-2"],
+            ["P Block", "Morning", 54.5, "PBlock-2"],
+            ["P Block", "Night", 46.4, "PBlock-2"],
+            ["P Block", "Afternoon", 64.6, "PBlock-3"],
+            ["P Block", "Evening", 68.3, "PBlock-3"],
+            ["P Block", "Midnight", 41.7, "PBlock-3"],
+            ["P Block", "Morning", 53.9, "PBlock-3"],
+            ["P Block", "Night", 48.5, "PBlock-3"],
+            ["Walkway A&B", "Afternoon", 68.6, "roadbwAa-1"],
+            ["Walkway A&B", "Evening", 72.9, "roadbwAa-1"],
+            ["Walkway A&B", "Midnight", 62.0, "roadbwAa-1"],
+            ["Walkway A&B", "Morning", 54.7, "roadbwAa-1"],
+            ["Walkway A&B", "Night", 61.5, "roadbwAa-1"],
+            ["Walkway A&B", "Afternoon", 72.5, "roadbwAa-2"],
+            ["Walkway A&B", "Evening", 72.4, "roadbwAa-2"],
+            ["Walkway A&B", "Midnight", 64.2, "roadbwAa-2"],
+            ["Walkway A&B", "Morning", 56.3, "roadbwAa-2"],
+            ["Walkway A&B", "Night", 64.6, "roadbwAa-2"],
+            ["Walkway A&B", "Afternoon", 70.4, "roadbwAa-3"],
+            ["Walkway A&B", "Evening", 68.4, "roadbwAa-3"],
+            ["Walkway A&B", "Midnight", 59.0, "roadbwAa-3"],
+            ["Walkway A&B", "Morning", 53.7, "roadbwAa-3"],
+            ["Walkway A&B", "Night", 66.4, "roadbwAa-3"],
+            ["Walkway A&B", "Afternoon", 71.2, "roadbwAa-4"],
+            ["Walkway A&B", "Evening", 72.1, "roadbwAa-4"],
+            ["Walkway A&B", "Midnight", 60.8, "roadbwAa-4"],
+            ["Walkway A&B", "Morning", 49.8, "roadbwAa-4"],
+            ["Walkway A&B", "Night", 60.3, "roadbwAa-4"],
+            ["Sports Area", "Afternoon", 46.2, "SportsAr-1"],
+            ["Sports Area", "Evening", 55.6, "SportsAr-1"],
+            ["Sports Area", "Midnight", 43.4, "SportsAr-1"],
+            ["Sports Area", "Morning", 47.9, "SportsAr-1"],
+            ["Sports Area", "Night", 45.3, "SportsAr-1"],
+            ["Sports Area", "Afternoon", 46.2, "SportsAr-2"],
+            ["Sports Area", "Evening", 50.8, "SportsAr-2"],
+            ["Sports Area", "Midnight", 40.4, "SportsAr-2"],
+            ["Sports Area", "Morning", 50.2, "SportsAr-2"],
+            ["Sports Area", "Night", 46.3, "SportsAr-2"],
+            ["Sports Area", "Afternoon", 43.1, "SportsAr-3"],
+            ["Sports Area", "Evening", 52.5, "SportsAr-3"],
+            ["Sports Area", "Midnight", 38.7, "SportsAr-3"],
+            ["Sports Area", "Morning", 42.6, "SportsAr-3"],
+            ["Sports Area", "Night", 43.2, "SportsAr-3"],
+            ["Sports Area", "Afternoon", 48.6, "SportsAr-4"],
+            ["Sports Area", "Evening", 56.0, "SportsAr-4"],
+            ["Sports Area", "Midnight", 44.7, "SportsAr-4"],
+            ["Sports Area", "Morning", 46.7, "SportsAr-4"],
+            ["Sports Area", "Night", 45.3, "SportsAr-4"],
+            ["Sports Complex", "Afternoon", 59.1, "SportsCo-1"],
+            ["Sports Complex", "Evening", 71.7, "SportsCo-1"],
+            ["Sports Complex", "Midnight", 49.0, "SportsCo-1"],
+            ["Sports Complex", "Morning", 73.0, "SportsCo-1"],
+            ["Sports Complex", "Night", 52.5, "SportsCo-1"],
+            ["Sports Complex", "Afternoon", 61.2, "SportsCo-2"],
+            ["Sports Complex", "Evening", 68.4, "SportsCo-2"],
+            ["Sports Complex", "Midnight", 48.0, "SportsCo-2"],
+            ["Sports Complex", "Morning", 68.0, "SportsCo-2"],
+            ["Sports Complex", "Night", 49.2, "SportsCo-2"],
+            ["Sports Complex", "Afternoon", 54.6, "SportsCo-3"],
+            ["Sports Complex", "Evening", 67.2, "SportsCo-3"],
+            ["Sports Complex", "Midnight", 47.0, "SportsCo-3"],
+            ["Sports Complex", "Morning", 64.5, "SportsCo-3"],
+            ["Sports Complex", "Night", 48.5, "SportsCo-3"],
+            ["Sports Complex", "Afternoon", 53.3, "SportsCo-4"],
+            ["Sports Complex", "Evening", 63.3, "SportsCo-4"],
+            ["Sports Complex", "Midnight", 40.3, "SportsCo-4"],
+            ["Sports Complex", "Morning", 63.1, "SportsCo-4"],
+            ["Sports Complex", "Night", 45.0, "SportsCo-4"],
+            ["Sports Field", "Afternoon", 40.9, "SportsFi-1"],
+            ["Sports Field", "Evening", 51.7, "SportsFi-1"],
+            ["Sports Field", "Midnight", 39.2, "SportsFi-1"],
+            ["Sports Field", "Morning", 38.2, "SportsFi-1"],
+            ["Sports Field", "Night", 41.4, "SportsFi-1"],
+            ["Sports Field", "Afternoon", 46.9, "SportsFi-2"],
+            ["Sports Field", "Evening", 56.7, "SportsFi-2"],
+            ["Sports Field", "Midnight", 41.4, "SportsFi-2"],
+            ["Sports Field", "Morning", 43.0, "SportsFi-2"],
+            ["Sports Field", "Night", 44.0, "SportsFi-2"],
+            ["Sports Field", "Afternoon", 48.4, "SportsFi-3"],
+            ["Sports Field", "Evening", 62.7, "SportsFi-3"],
+            ["Sports Field", "Midnight", 46.9, "SportsFi-3"],
+            ["Sports Field", "Morning", 46.7, "SportsFi-3"],
+            ["Sports Field", "Night", 46.5, "SportsFi-3"],
+          ],
+          cat: {
+            "N Block": "Academic",
+            "A Block": "Academic",
+            "Boy's Hostel": "Residential",
+            "B Block": "Academic",
+            "Girl's Hostel": "Residential",
+            "Gobble Mess": "Commercial",
+            "Sports Complex": "Recreational",
+            LRC: "Silence Zone",
+            "Paid Mess": "Commercial",
+            "German Hanger": "Recreational",
+            "P Block": "Academic",
+            "Sports Field": "Recreational",
+            "Sports Area": "Recreational",
+            "M Block": "Administrative",
+          },
+          study: ["Academic", "Silence Zone", "Administrative"],
+        },
         S = ["Morning", "Afternoon", "Evening", "Night", "Midnight"],
         LIM = {
           Morning: 55,
@@ -917,7 +1305,7 @@
       ]
         .map(
           (s) =>
-            `<div class="stat"><big><span data-n="${s[0]}">0</span><small style="font-size:18px"> ${s[1]}</small></big><span>${s[2]}</span></div>`,
+            `<div class="stat"><big><span data-n="${s[0]}">0</span><small class="u"> ${s[1]}</small></big><span>${s[2]}</span></div>`,
         )
         .join("");
       // WHO slot chart
@@ -989,7 +1377,7 @@
           const zs = zones.filter((z) => (D.cat[z] || "Other") == c),
             v = S.map((s) => mean(zs.map((z) => ZM[z][s])));
           h +=
-            `<path d="M${v.map((y, i) => X(i) + "," + Y(y)).join("L")}" fill="none" stroke="${cc[k]}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>` +
+            `<path pathLength="1" d="M${v.map((y, i) => X(i) + "," + Y(y)).join("L")}" fill="none" stroke="${cc[k]}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>` +
             v
               .map(
                 (y, i) =>
@@ -1193,11 +1581,56 @@
           }),
         { threshold: 0.15 },
       );
+      // scroll animation setup: alternate sides, stagger groups, cascade the heat grid
+      document
+        .querySelectorAll(".g2")
+        .forEach((g) =>
+          [...g.children].forEach(
+            (c, i) => (c.dataset.a = i % 2 ? "right" : "left"),
+          ),
+        );
+      const mapf = document.querySelector(".mapf");
+      if (mapf) mapf.dataset.a = "zoom";
+      document
+        .querySelectorAll(".imp")
+        .forEach((g) =>
+          [...g.children].forEach(
+            (c, i) => (c.style.transitionDelay = i * 90 + "ms"),
+          ),
+        );
+      document
+        .querySelectorAll("#grid tr")
+        .forEach((tr, r) =>
+          [...tr.children].forEach((td, c) =>
+            td.style.setProperty("--d", r * 0.05 + c * 0.07 + "s"),
+          ),
+        );
+      // hero drifts and fades as you scroll away from it
+      const hc = document.querySelector("#hero .copy"),
+        hs = document.querySelector("#hero .in");
+      let tick = false;
+      addEventListener(
+        "scroll",
+        () => {
+          if (tick) return;
+          tick = true;
+          requestAnimationFrame(() => {
+            tick = false;
+            const y = scrollY,
+              h = innerHeight;
+            if (y > h * 1.2) return;
+            hc.style.transform = `translateY(${y * 0.22}px)`;
+            hc.style.opacity = Math.max(0, 1 - y / (h * 0.6));
+            hs.style.transform = `translateY(${y * 0.1}px)`;
+          });
+        },
+        { passive: true },
+      );
       document.querySelectorAll(".rv").forEach((x) => io.observe(x));
       document.querySelectorAll("[data-n]").forEach((el) => {
         const t = +el.dataset.n,
           dec = t % 1 ? 1 : 0,
-          T = document.body.classList.contains("calm") ? 1 : 1400,
+          T = 1400,
           t0 = performance.now();
         (function s(n) {
           const p = Math.min(1, (n - t0) / T);
@@ -1205,29 +1638,6 @@
           if (p < 1) requestAnimationFrame(s);
         })(t0);
       });
-      addEventListener("scroll", () => {
-        $("prog").style.width =
-          (scrollY / (document.body.scrollHeight - innerHeight)) * 100 + "%";
-      });
-      // motion switch (defaults to ON whatever the OS setting is; the choice is remembered)
-      const mo = $("mo"),
-        setMo = (on) => {
-          document.body.classList.toggle("calm", !on);
-          mo.textContent = "Motion: " + (on ? "on" : "off");
-          try {
-            localStorage.setItem("mo", on ? "1" : "0");
-          } catch (e) {}
-        };
-      setMo(
-        (() => {
-          try {
-            return localStorage.getItem("mo") !== "0";
-          } catch (e) {
-            return true;
-          }
-        })(),
-      );
-      mo.onclick = () => setMo(document.body.classList.contains("calm"));
       // hero background video: horizontal mouse movement scrubs it (no autoplay)
       const vid = $("bgv"),
         SENSITIVITY = 0.8;
