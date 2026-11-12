@@ -43,12 +43,12 @@ It has two parts that work together:
 
 ```
 BU-SoundScape/
-├── index.html                          # Built website (generated)
-├── noise_map.html                      # Built interactive map (generated)
-├── site_template.html                  # Website design, text and code (edit this)
+├── index.html                          # Built website 
+├── noise_map.html                      # Built interactive map 
+├── site_template.html                  # Website design, text and code 
 ├── build_site.py                       # Builds index.html from the template + data
 ├── build_noise_map.py                  # Builds noise_map.html from the data + GeoJSON
-├── NoiseDataAvg.csv                    # Average noise per location per time slot (used by the map and site)
+├── NoiseDataAvg.csv                    # Average noise per location per time slot 
 ├── NoiseDataMain.csv                   # Individual readings: date, time, location, dB
 ├── zones.geojson                       # Campus zone polygons and categories
 └── zones_with_centers_and_vertices.csv # Zone centers and vertices
